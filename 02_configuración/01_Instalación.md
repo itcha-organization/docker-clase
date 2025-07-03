@@ -2,6 +2,8 @@
 
 ## 0. ¿Qué es WSL2?
 
+## 1. Instalación de WindowsTerminal
+
 設定>ストレージより空き容量確認
 WSL2,Docker インストールのため、 20GB 程空があるのが望ましい
 
@@ -11,6 +13,8 @@ MS アカウントでログインして共有するか聞かれたら基本 No �
 (別端末で設定共有したいなどあれば Yes)
 
 Windows Terminalインストール済の場合、最新版を取得
+
+## 2. Instalación de WSL2
 
 ![image](https://github.com/user-attachments/assets/f7fb914a-09dc-4231-916a-1f4a9a07afd6)
 
@@ -35,16 +39,13 @@ PowerShell を管理者権限で起動し、以下コマンドを実行
 ![image](https://github.com/user-attachments/assets/7c81782c-eba1-44c3-a909-0265d03e3f5f)
 
 
-wsl --install -d Ubuntu
-
-![image](https://github.com/user-attachments/assets/cd7ee436-6cdb-4c70-a9e0-81eaafa78c12)
-
-実行完了後以下が出るのでキー押下
-
-![image](https://github.com/user-attachments/assets/81c878db-6e27-46c4-8a65-9e9c822b07bc)
-
+wsl --install
+![image](https://github.com/user-attachments/assets/b2bb1d0b-728a-410b-98f1-844400536d45)
+※途中で確認が出たら、はいを押す
 
 実行完了したら PC 再起動
+
+![image](https://github.com/user-attachments/assets/3a9566ff-432a-462e-983e-01e22444884c)
 
 
 
