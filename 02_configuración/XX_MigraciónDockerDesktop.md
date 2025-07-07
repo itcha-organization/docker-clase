@@ -1,6 +1,11 @@
 ![image](https://github.com/user-attachments/assets/fdf88422-aee9-4880-9966-74f24039cd92)
 
 
+> ![image](https://github.com/user-attachments/assets/08750ec8-e105-4c81-b754-dfbad9181464)
+> ![image](https://github.com/user-attachments/assets/09f9854e-32c3-4038-8b28-d3afe88aff6e)
+
+
+
 以下は、「WSL 上の Ubuntu から Docker を完全にアンインストールする方法」の日本語訳です：
 
 ---
@@ -102,3 +107,11 @@ sudo snap remove docker
 
 * [https://docs.docker.com/engine/install/ubuntu/#uninstall-docker-engine](https://docs.docker.com/engine/install/ubuntu/#uninstall-docker-engine)
 * [https://stackoverflow.com/questions/44798842/how-to-completely-uninstall-docker](https://stackoverflow.com/questions/44798842/how-to-completely-uninstall-docker)
+
+# INSTALACION DE DOCKER DESKTOP
+
+![image](https://github.com/user-attachments/assets/62de90ac-2d74-41e0-ba07-a53ff0b0cafb)
+
+![image](https://github.com/user-attachments/assets/40c0fc80-660c-42c9-a2f4-0f51a604055d)
+
+![image](https://github.com/user-attachments/assets/efbad90d-b64c-427d-b25d-0a8657c101ab)
