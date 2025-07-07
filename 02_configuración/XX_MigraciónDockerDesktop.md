@@ -129,3 +129,22 @@ despues de reiniciar
 Si hay error, desactivar hyper-v
 
 ![image](https://github.com/user-attachments/assets/471f9298-6f4e-414d-8c1c-53bd69aa27af)
+
+
+
+Volver a instalar despues de desactivar hyper-v
+
+![image](https://github.com/user-attachments/assets/c30af17c-2cd7-4480-9684-d2f14008990e)
+
+![image](https://github.com/user-attachments/assets/8e3001d3-9298-4e47-a2be-34a65c80cb41)
+
+![image](https://github.com/user-attachments/assets/61bf5947-c9aa-4781-a7ac-e6693eff4a30)
+
+![image](https://github.com/user-attachments/assets/c95b0b45-30ee-43ec-a530-7efb294185d0)
+
+![image](https://github.com/user-attachments/assets/9f530bde-c369-49c7-8649-803e74fc21df)
+
+Docker Desktop - Ubuntu
+WSL integration with distro 'Ubuntu' unexpectedly stopped. Do you want to restart it?
+
+retrieving homedir for Ubuntu distro: getting home folder for Ubuntu distro: running echo $HOME in Ubuntu: sending to distro: write |1: Se está cerrando la canalización.
