@@ -1,3 +1,6 @@
+![image](https://github.com/user-attachments/assets/fdf88422-aee9-4880-9966-74f24039cd92)
+
+
 以下は、「WSL 上の Ubuntu から Docker を完全にアンインストールする方法」の日本語訳です：
 
 ---
