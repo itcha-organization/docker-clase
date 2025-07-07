@@ -115,3 +115,17 @@ sudo snap remove docker
 ![image](https://github.com/user-attachments/assets/40c0fc80-660c-42c9-a2f4-0f51a604055d)
 
 ![image](https://github.com/user-attachments/assets/efbad90d-b64c-427d-b25d-0a8657c101ab)
+
+despues de reiniciar
+
+![image](https://github.com/user-attachments/assets/43bd1809-61cd-4864-9698-c5a85d7d7d55)
+
+![image](https://github.com/user-attachments/assets/3721aec4-65f5-422f-90f8-d9fe0af03542)
+
+![image](https://github.com/user-attachments/assets/9222869a-23fe-487e-972d-01b8c1be091c)
+
+![image](https://github.com/user-attachments/assets/2e4b054b-c961-46b2-8f8f-f95da8a5fb8d)
+
+Si hay error, desactivar hyper-v
+
+![image](https://github.com/user-attachments/assets/471f9298-6f4e-414d-8c1c-53bd69aa27af)
