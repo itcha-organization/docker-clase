@@ -1,3 +1,8 @@
+# Migración a Docker Desktop
+Anteriormente, Docker se instalaba directamente en una máquina virtual Ubuntu.
+
+Sin embargo, usar `Docker Desktop` es más cómodo, así que sigue estos pasos para instalar `Docker Desktop`.
+
 # Desinstalar completamente Docker de Ubuntu en WSL
 
 Para eliminar completamente Docker de tu instalación de Ubuntu que se ejecuta en Windows Subsystem for Linux (WSL), sigue estos pasos:
