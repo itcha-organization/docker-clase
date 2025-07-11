@@ -82,3 +82,51 @@ docker container rm [opciones] CONTENEDOR [CONTENEDOR...]
 
 ### Pruebe lo siguiente:
 Elimina los contenedores parados con `docker container rm`.
+
+## 2.5 Probar las opciones del comando `run`
+
+### Nombrar contenedor: `docker container run --name <nombre>`
+Para detener o eliminar un contenedor, es necesario especificar el ID del contenedor o su nombre. Sin embargo, ambos son valores generados aleatoriamente por defecto, por lo que es necesario verificarlos previamente.
+Asignar un nombre personalizado al contenedor permite evitar la necesidad de comprobar esta información cada vez.
+```bash
+docker container run --name hello hello-world
+```
+```bash
+docker container ls --all
+```
+```bash
+docker container rm hello
+```
+
+### Eliminar automáticamente los contenedores al detener: `docker container run --rm`
+Si intentas iniciar un contenedor con el nombre hello usando el siguiente comando dos veces, se producirá un error.
+Esto se debe a que el contenedor hello que se inició anteriormente todavía existe con el estado Exited
+```bash
+docker container run --name hello hello-world
+```
+Si inicias un contenedor con la opción `--rm`, este se eliminará automáticamente al finalizar, sin necesidad de usar `docker container rm` cada vez.
+```bash
+docker container run --name hello2 --rm hello-world
+```
+```bash
+docker container ls --all
+```
+
+## Información de referencia: ¿Qué son los comandos antiguos (legacy) de Docker?
+Docker solía utilizar una serie de **comandos antiguos** que hoy en día han sido reemplazados por una estructura más organizada basada en subcomandos.
+Aunque muchos de estos comandos antiguos **aún funcionan**, se consideran obsoletos y se recomienda utilizar las versiones nuevas.
+
+Como el número de comandos ha aumentado demasiado, se han reorganizado en un nuevo formato mediante subcomandos.
+
+### Ejemplos de comandos antiguos y sus equivalentes actuales
+| Comando antiguo (obsoleto) | Comando actual recomendado | Descripción                        |
+| -------------------------- | -------------------------- | ---------------------------------- |
+| `docker ps`                | `docker container ls`      | Listar contenedores                |
+| `docker rm`                | `docker container rm`      | Eliminar contenedores              |
+| `docker run`               | `docker container run`     | Crear y ejecutar un contenedor     |
+| `docker images`            | `docker image ls`          | Listar imágenes                    |
+| `docker rmi`               | `docker image rm`          | Eliminar una imagen                |
+| `docker build`             | `docker image build`       | Construir una imagen               |
+| `docker exec`              | `docker container exec`    | Ejecutar comandos en un contenedor |
+
+<img width="782" height="492" alt="image" src="https://github.com/user-attachments/assets/389ae3f6-20db-443b-9493-c27231d36afe" />
