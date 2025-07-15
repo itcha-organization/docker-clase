@@ -1,5 +1,7 @@
 # Publicar puerto del contenedor
 
+<img width="670" height="246" alt="image" src="https://github.com/user-attachments/assets/d6896c09-b926-4760-a211-79bfdc246793" />
+
 ## 1. Objetivo
 Aprender a usar la opción `--publish` (`-p`) en `docker container run` para mapear puertos entre el host y el contenedor, permitiendo acceder a los servicios que corren dentro del contenedor desde el exterior.
 
