@@ -72,7 +72,7 @@ mysql --host=127.0.0.1 --port=3306 --user=root --password=secreto
 > ```
 > Ahora puedes escribir:
 > ```bash
-> whoami
+> select version();
 > ```
 > Para salir del modo interactivo: Presiona Ctrl + D
 
