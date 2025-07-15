@@ -1,5 +1,7 @@
 # Modo interactivo en contenedor
 
+<img width="660" height="177" alt="image" src="https://github.com/user-attachments/assets/46f4a212-c10a-4b2d-b36c-e662e5ba343d" />
+
 ## Objetivo del capítulo
 Aprender cómo usar `docker container run --interactive --tty` (`-it`) para trabajar de manera interactiva con un contenedor que utiliza la imagen oficial de PHP.
 
