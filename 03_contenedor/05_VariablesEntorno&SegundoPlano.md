@@ -90,7 +90,7 @@ mysql --host=127.0.0.1 --port=3306 --user=root --password=secreto
 1. Ejecuta un contenedor de MySQL con contraseña `mysecret`.
 2. Usa `--detach` para que se ejecute en segundo plano.
 3. Verifica que el contenedor esté activo.
-4. Conéctate al contenedor e ingresa al cliente MySQL como root.
+4. Ingresa al cliente MySQL como root.
 5. ¿Qué pasa si no defines `MYSQL_ROOT_PASSWORD`?
 
 ---
@@ -120,16 +120,11 @@ Deberías ver una fila con la imagen `mysql:8.0` y el estado `Up`.
 4.
 
 ```bash
-docker container exec -it mysqlbg bash
-mysql -u root -p
+mysql --host=127.0.0.1 --port=3306 --user=root --password=secreto
 ```
 
 Introduce la contraseña `mysecret`.
 
 5.
 
-Si no defines `MYSQL_ROOT_PASSWORD`, el contenedor **fallará al iniciarse** por razones de seguridad. Verás un mensaje de error en los logs:
-
-```bash
-docker container logs mysqlbg
-```
+Si no defines `MYSQL_ROOT_PASSWORD`, el contenedor **fallará al iniciarse** por razones de seguridad.
