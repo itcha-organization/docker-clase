@@ -21,32 +21,32 @@ docker container exec [opciones] <nombre_contenedor> <comando>
 ## Preparación: iniciar un contenedor de PostgreSQL
 Usaremos la imagen oficial de PostgreSQL para probar los ejemplos.
 ```bash
-docker run -d --name my-postgres -e POSTGRES_PASSWORD=secret postgres
+docker container run -d --name my-postgres -e POSTGRES_PASSWORD=secret postgres
 ```
 
 ## Ejemplo 1: Ejecutar comandos simples dentro del contenedor
 ### Ver el contenido del directorio raíz del contenedor:
 ```bash
-docker exec my-postgres ls /
+docker container exec my-postgres ls /
 ```
 
 ### Ver el contenido del directorio `/var/lib/postgresql`:
 ```bash
-docker exec my-postgres ls /var/lib/postgresql
+docker container exec my-postgres ls /var/lib/postgresql
 ```
 
 ## Ejemplo 2: Ejecutar en modo interactivo (`-it`)
 Si deseas interactuar con el contenedor (por ejemplo, iniciar una shell o consola), usa `-it`:
 ### Acceder al shell bash (si está disponible):
 ```bash
-docker exec -it my-postgres bash
+docker container exec -it my-postgres bash
 ```
 > ❗ Algunos contenedores no tienen `bash` por defecto. Usa `sh` si `bash` no está disponible:
 
 ## Ejemplo 3: Ejecutar psql dentro del contenedor
 ### Iniciar la consola de PostgreSQL:
 ```bash
-docker exec -it my-postgres psql -U postgres
+docker container exec -it my-postgres psql -U postgres
 ```
 ### Ejecutar una consulta desde la consola:
 ```sql
@@ -68,7 +68,7 @@ docker rm my-postgres
 ## Ejercicios 
 Preparación:
 ```bash
-docker run -d --name my-postgres -e POSTGRES_PASSWORD=secret postgres
+docker container run -d --name my-postgres -e POSTGRES_PASSWORD=secret postgres
 ```
 
 1. Ejecuta el comando `env` dentro del contenedor para ver sus variables de entorno.
@@ -78,13 +78,13 @@ docker run -d --name my-postgres -e POSTGRES_PASSWORD=secret postgres
 
 1. 
 ```
-docker exec my-postgres env
+docker container exec my-postgres env
 ```
 > <img width="895" height="259" alt="image" src="https://github.com/user-attachments/assets/b36b3c35-fe23-47e6-a152-735001cea506" />
 
 2.
 ```
-docker exec -it my-postgres bash
+docker container exec -it my-postgres bash
 ```
 ```bash
 cd /etc
