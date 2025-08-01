@@ -10,6 +10,52 @@ Cubriremos los siguientes conceptos clave:
 * Uso del comando `RUN`
 * Cómo construir la imagen con `docker image build`
 
+## Estructura completa del nombre y la etiqueta de una imagen Docker
+Una imagen Docker se nombra con la siguiente estructura:
+```
+[host del registro]/[namespace]/[repositorio]:[etiqueta]
+```
+Ejemplo:
+```
+docker.io/library/nginx:1.25
+```
+### Explicación de cada parte:
+| Elemento          | Ejemplo     | Descripción                                          |
+| ----------------- | ----------- | ---------------------------------------------------- |
+| Host del registro | `docker.io` | El servidor donde se aloja la imagen                 |
+| Namespace         | `library`   | Suele ser el nombre del usuario o de la organización |
+| Repositorio       | `nginx`     | Lugar donde se almacena la imagen como tal           |
+| Etiqueta (tag)    | `1.25`      | Etiqueta que identifica versión o propósito          |
+
+### Elementos que pueden omitirse
+Docker permite omitir ciertos elementos, que se rellenan automáticamente con valores por defecto:
+| Elemento omitido | Valor por defecto          | Ejemplo interpretado                |
+| ---------------- | -------------------------- | ----------------------------------- |
+| Registro         | `docker.io`                | `nginx` → `docker.io/library/nginx` |
+| Namespace        | `library` (para oficiales) | `nginx` → `docker.io/library/nginx` |
+| Etiqueta         | `latest`                   | `nginx` → `nginx:latest`            |
+
+Por ejemplo:
+```bash
+docker pull nginx
+```
+En realidad significa:
+```bash
+docker pull docker.io/library/nginx:latest
+```
+
+### ❌ NO se recomienda usar la etiqueta `latest`
+* La etiqueta `latest` simplemente apunta a la versión predeterminada en ese momento.
+	* Por ejemplo, hoy `ubuntu:latest` podría ser `ubuntu:22.04`, pero mañana podría cambiar a `ubuntu:24.04`.
+* Si usas `latest`, cada nueva construcción podría tener diferentes dependencias.
+  > #### Ejemplo:
+  > ```dockerfile
+  > FROM ubuntu:latest
+  > ```
+  > * En 2024 → se usará Ubuntu 22.04
+  > * En 2025 → podría cambiarse a Ubuntu 24.04
+  > → El mismo `Dockerfile` podría construirse sobre un sistema operativo **diferente**.
+
 ## Explicación de cada comando
 
 ### 1️⃣ `FROM`
