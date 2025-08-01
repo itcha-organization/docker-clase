@@ -9,8 +9,8 @@
 * **Dockerfile**: la receta paso a paso
 
 🍳 Hacer todo desde cero cada vez es cansado.
-📄 Pero si escribes la receta, tú y otras personas pueden preparar el mismo plato con facilidad.
-📦 Y si se forma un chef especializado, No necesita leer la receta cada vez. Ya sabe los pasos, ingredientes y tiempos y lo hace rápido, siempre igual, en cualquier cocina (es decir, en cualquier entorno).
+<br>📄 Pero si escribes la receta, tú y otras personas pueden preparar el mismo plato con facilidad.
+<br>📦 Y si se forma un chef especializado, No necesita leer la receta cada vez. Ya sabe los pasos, ingredientes y tiempos y lo hace rápido, siempre igual, en cualquier cocina (es decir, en cualquier entorno).
 
 ## 2. ¿Por qué necesitamos imágenes y Dockerfile?
 
@@ -25,48 +25,41 @@ Hasta ahora has aprendido a:
 Pero tal vez te hayas preguntado:
 
 > ☹️ “¡Los comandos son demasiado largos cada vez!”
-> ☹️ “Tener que configurar el entorno a mano es tedioso…”
-> ☹️ “¿Cómo comparto mi entorno con otros de forma sencilla?”
+> <br>☹️ “Tener que configurar el entorno a mano es tedioso…”
+> <br>☹️ “¿Cómo comparto mi entorno con otros de forma sencilla?”
 
 👉 Todo eso se puede **automatizar, reutilizar y compartir** gracias a **Docker Image** y **Dockerfile**
 
 ## 3. Ejemplo práctico: ¿qué diferencia hacen?
 
 ### 🚶 Sin Dockerfile (solo contenedor)
-
 ```bash
-docker run -it python:3.11
-pip install flask
-python app.py
+docker container run -it ubuntu:22.04 bash
+apt update
+apt install -y vim
 ```
-
-* Cada vez instalas Flask manualmente
+* Cada vez instalas vim manualmente
 * La configuración se pierde al cerrar el contenedor
 * No es fácil compartir ese entorno
 
----
-
 ### 🚀 Con Dockerfile
-
+Dockerfile:
 ```Dockerfile
-FROM python:3.11
-RUN pip install flask
-COPY app.py .
-CMD ["python", "app.py"]
+FROM ubuntu:22.04
+RUN apt-get update
+RUN install -y vim
 ```
 
 ```bash
-docker image build -t myflask .
-docker container run -p 5000:5000 myflask
+docker image build -t myubuntu .
+docker container run -it myubuntu bash
 ```
-
 ✅ Con una sola imagen:
 * Siempre tienes el mismo entorno listo para usar
 * Las dependencias ya están instaladas
 * Lo puedes compartir fácilmente con otros/as
 
 ## 4. El valor de Dockerfile: “Reproducibilidad” y “Colaboración”
-
 | Lo aprendido antes      | Con Dockerfile                 |
 | ----------------------- | ------------------------------ |
 | Crear el entorno a mano | Crear una imagen reutilizable  |
