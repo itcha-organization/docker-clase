@@ -58,12 +58,50 @@ SELECT current_database();
 > ```
 
 ## Limpieza
-
 Cuando termines, puedes detener y eliminar el contenedor:
 ```bash
 docker stop my-postgres
 docker rm my-postgres
 ```
+
+
+## Diferencias entre `docker container run` y `docker container exec`
+
+### 🔍 `docker container run` (o `docker run`)
+
+* **Crea y arranca un nuevo contenedor** desde una imagen.
+* Dentro del contenedor, **inicia un solo proceso**, que será el **PID 1** (proceso principal).
+* Cuando ese proceso termina, **el contenedor también se detiene** (a menos que esté en modo `-d`).
+
+🧠 Ejemplo:
+```bash
+docker container run postgres head -n 4 /etc/os-release
+```
+→ Se crea un nuevo contenedor de PostgreSQL que ejecuta `head` como **proceso PID 1**.
+
+---
+
+### 🔍 `docker container exec` (o `docker exec`)
+
+* **Ejecuta un nuevo proceso dentro de un contenedor ya en funcionamiento**.
+* Este nuevo proceso **no es PID 1**, sino un **proceso hijo** dentro del contenedor.
+* El contenedor debe estar **activo previamente**.
+
+🧠 Ejemplo:
+```bash
+docker container exec my-postgres head -n 4 /etc/os-release
+```
+→ Ejecuta el comando `head` dentro del contenedor `my-postgres` como proceso adicional.
+> <img width="558" height="283" alt="image" src="https://github.com/user-attachments/assets/a08a940f-6d29-458c-bcfb-abfdaeccc99d" />
+### 📝 Resumen en Tabla
+
+| Aspecto                       | `docker run`                       | `docker exec`                          |
+| ----------------------------- | ---------------------------------- | -------------------------------------- |
+| Crea contenedor               | ✅ Sí                               | ❌ No                                   |
+| Requiere contenedor en marcha | ❌ No                               | ✅ Sí                                   |
+| Proceso generado              | PID 1 (proceso principal)          | Proceso hijo adicional                 |
+| Finaliza el contenedor        | ✅ Sí (salvo `-d`)                  | ❌ No                                   |
+| Uso común                     | Iniciar servicios, pruebas rápidas | Debug, mantenimiento, ejecución manual |
 
 ## Ejercicios 
 Preparación:
