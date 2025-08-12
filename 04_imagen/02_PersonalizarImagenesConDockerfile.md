@@ -113,7 +113,7 @@ ubuntu-vim    latest    abcd12345678   1 minute ago    80MB
 docker container run -it ubuntu-vim:latest
 ```
 * `-it` te permite interactuar con la terminal del contenedor.
-* Prueba escribir `vim` para verificar que esté instalado.
+* Prueba escribir `vi` para verificar que esté instalado.
 
 ## Ejercicios
 1. Crea un Dockerfile basado en `ubuntu:20.04` que instale `curl`. Llámalo `ubuntu-curl:dev`.
