@@ -47,7 +47,7 @@ Dockerfile:
 ```Dockerfile
 FROM ubuntu:22.04
 RUN apt-get update
-RUN install -y vim
+RUN apt-get install -y vim
 ```
 
 ```bash
