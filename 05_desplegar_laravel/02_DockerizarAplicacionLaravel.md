@@ -90,6 +90,8 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 ```
 
+
+
 ## Crear una imagen
 ```
 docker image build -t laravel-app:v1.0 .
@@ -173,40 +175,36 @@ services:
 #### 1️⃣ Crear un repositorio remoto
 
 1. Accede a [hub.docker.com](https://hub.docker.com/).
-2. Haz clic en **"Create a Repository"**.
-3. Ingresa un nombre para el repositorio y selecciona su visibilidad (pública o privada), luego haz clic en **"Create"**.([Qiita][1])
+2. Inicia sesión.
+3. Haz clic en **"Create a Repository"**.
+4. Ingresa un nombre para el repositorio y selecciona su visibilidad (pública o privada), luego haz clic en **"Create"**.
 
 #### 2️⃣ Iniciar sesión en DockerHub desde tu entorno local
-
+Ejecute el siguiente comando e introduzca la contraseña en el prompt que aparece.
 ```bash
-docker login -u <nombre_de_usuario> -p <contraseña>
+docker login -u <nombre_de_usuario>
 ```
-
-
-
 Si la autenticación es exitosa, verás el mensaje:
-
 ```
 Login Succeeded
 ```
-
-
+> <img width="808" height="158" alt="image" src="https://github.com/user-attachments/assets/d4cc2756-d35a-4309-b8bf-d1b90a193168" />
 
 #### 3️⃣ Etiquetar la imagen local para asociarla con el repositorio remoto
 
 ```bash
 docker tag <nombre_imagen_local>:<etiqueta> <nombre_usuario>/<nombre_repositorio>:<etiqueta>
 ```
-
-
-
 * **\<nombre\_imagen\_local>**: Nombre de la imagen en tu entorno local.
 * **<etiqueta>**: Etiqueta de la imagen (por ejemplo, `latest`).
 * **\<nombre\_usuario>**: Tu nombre de usuario en DockerHub.
 * **\<nombre\_repositorio>**: Nombre del repositorio que creaste en DockerHub.
+> <img width="1161" height="56" alt="image" src="https://github.com/user-attachments/assets/df2a6398-7a79-4bef-971c-ba9fc96452c5" />
 
 #### 4️⃣ Subir la imagen al repositorio remoto
-
 ```bash
 docker push <nombre_usuario>/<nombre_repositorio>:<etiqueta>
 ```
+>
+
+Puede ver que la imagen se ha añadido en Docker Hub.
