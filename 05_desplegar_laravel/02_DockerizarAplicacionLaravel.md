@@ -205,6 +205,7 @@ docker tag <nombre_imagen_local>:<etiqueta> <nombre_usuario>/<nombre_repositorio
 ```bash
 docker push <nombre_usuario>/<nombre_repositorio>:<etiqueta>
 ```
->
+> <img width="991" height="464" alt="image" src="https://github.com/user-attachments/assets/871f5404-03cd-419a-8401-0304d87edeb6" />
 
 Puede ver que la imagen se ha añadido en Docker Hub.
+> <img width="1904" height="745" alt="image" src="https://github.com/user-attachments/assets/86bc07ed-35f1-4577-b3e1-77384fb781de" />
