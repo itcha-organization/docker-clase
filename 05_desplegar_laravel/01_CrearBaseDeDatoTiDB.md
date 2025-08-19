@@ -34,6 +34,11 @@ mysql --comments --connect-timeout 150 -u '2puvRTdtCXSZp6Z.root' -h gateway01.us
 > Ejemplo:
 > 
 
+## Actualiza la información de la base de dato en `.env`
+Cambia la información del fichero `.env` por la del TiDB.
+
+> <img width="758" height="690" alt="image" src="https://github.com/user-attachments/assets/a07c3b1e-7c61-454f-8c8e-e3945aab33dc" />
+
 ## Habilitar SSL para conexiones de base de datos
 
 El contenido del certificado CA es demasiado largo y difícil de manejar, por lo que se codifica en Base64.
