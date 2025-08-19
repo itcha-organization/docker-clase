@@ -90,30 +90,123 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 ```
 
-
-## Crear una imagen e iniciar un contenedor localmente
-
+## Crear una imagen
 ```
 docker image build -t laravel-app:v1.0 .
 ```
-```
-docker container run --rm \
-  --name laravel-app \
-  -p 8000:8000 \
-  -e APP_NAME=Laravel \
-  -e APP_ENV=local \
-  -e APP_KEY=★la clave★ \
-  -e APP_DEBUG=true \
-  -e APP_URL=http://localhost \
-  -e DB_CONNECTION=mysql \
-  -e DB_HOST=★su TiDB HOST★ \
-  -e DB_PORT=4000 \
-  -e DB_DATABASE=test \
-  -e DB_USERNAME=★su TiDB USERNAME★ \
-  -e DB_PASSWORD=★su TiDB USERNAME★ \
-  -e MYSQL_ATTR_SSL_CA_B64=★su certificado CA codificado en Base64★ \
-  laravel-app:v1.0
+
+## Ejectar un contenedor localmente con Docker Compose
+Docker Compose es una herramienta que permite gestionar varios contenedores de forma conjunta.
+
+Todos los contenedores que se van a iniciar y la información de las opciones se pueden describir en un único archivo, `docker-compose.yml`, lo que simplifica la ejecución, ya que se ahorra el trabajo de introducir comandos y se evitan errores debidos a errores tipográficos.
+
+**En esta ocasión solo hay un contenedor, pero hay una gran cantidad de variables de entorno.
+Por lo tanto, como el uso de `container run` alarga la sección de opciones, definiremos las opciones en `docker-compose.yml`.**
+
+Cree un archivo `docker-compose.yml` en el directorio raíz del proyecto y pegue lo siguiente.
+<br>**Los valores marcados con un símbolo ★ deben ser configurados por usted mismo.**
+```yaml
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: laravel-app
+        ports:
+            - "8000:8000"
+        environment:
+            - APP_NAME=Laravel
+            - APP_ENV=local
+            - APP_KEY=★sobrescríbase usted mismo★
+            - APP_DEBUG=true
+            - APP_TIMEZONE=UTC
+            - APP_URL=http://localhost
+            - APP_LOCALE=en
+            - APP_FALLBACK_LOCALE=en
+            - APP_FAKER_LOCALE=en_US
+            - APP_MAINTENANCE_DRIVER=file
+            - PHP_CLI_SERVER_WORKERS=4
+            - BCRYPT_ROUNDS=12
+            - LOG_CHANNEL=stack
+            - LOG_STACK=single
+            - LOG_DEPRECATIONS_CHANNEL=null
+            - LOG_LEVEL=debug
+            - DB_CONNECTION=mysql
+            - DB_HOST=★sobrescríbase usted mismo★
+            - DB_PORT=4000
+            - DB_DATABASE=test
+            - DB_USERNAME=★sobrescríbase usted mismo★
+            - DB_PASSWORD=★sobrescríbase usted mismo★
+            - MYSQL_ATTR_SSL_CA_B64=★sobrescríbase usted mismo★
+            - SESSION_DRIVER=database
+            - SESSION_LIFETIME=120
+            - SESSION_ENCRYPT=false
+            - SESSION_PATH=/
+            - SESSION_DOMAIN=null
+            - BROADCAST_CONNECTION=log
+            - FILESYSTEM_DISK=local
+            - QUEUE_CONNECTION=database
+            - CACHE_STORE=database
+            - CACHE_PREFIX=
+            - MEMCACHED_HOST=127.0.0.1
+            - REDIS_CLIENT=phpredis
+            - REDIS_HOST=127.0.0.1
+            - REDIS_PASSWORD=null
+            - REDIS_PORT=6379
+            - MAIL_MAILER=log
+            - MAIL_SCHEME=null
+            - MAIL_HOST=127.0.0.1
+            - MAIL_PORT=2525
+            - MAIL_USERNAME=null
+            - MAIL_PASSWORD=null
+            - MAIL_FROM_ADDRESS="hello@example.com"
+            - MAIL_FROM_NAME="${APP_NAME}"
+            - AWS_ACCESS_KEY_ID=
+            - AWS_SECRET_ACCESS_KEY=
+            - AWS_DEFAULT_REGION=us-east-1
+            - AWS_BUCKET=
+            - AWS_USE_PATH_STYLE_ENDPOINT=false
+            - VITE_APP_NAME="${APP_NAME}"
 ```
 ## Publicar la imagen en Docker Hub
 
-https://hub.docker.com/
+#### 1️⃣ Crear un repositorio remoto
+
+1. Accede a [hub.docker.com](https://hub.docker.com/).
+2. Haz clic en **"Create a Repository"**.
+3. Ingresa un nombre para el repositorio y selecciona su visibilidad (pública o privada), luego haz clic en **"Create"**.([Qiita][1])
+
+#### 2️⃣ Iniciar sesión en DockerHub desde tu entorno local
+
+```bash
+docker login -u <nombre_de_usuario> -p <contraseña>
+```
+
+
+
+Si la autenticación es exitosa, verás el mensaje:
+
+```
+Login Succeeded
+```
+
+
+
+#### 3️⃣ Etiquetar la imagen local para asociarla con el repositorio remoto
+
+```bash
+docker tag <nombre_imagen_local>:<etiqueta> <nombre_usuario>/<nombre_repositorio>:<etiqueta>
+```
+
+
+
+* **\<nombre\_imagen\_local>**: Nombre de la imagen en tu entorno local.
+* **<etiqueta>**: Etiqueta de la imagen (por ejemplo, `latest`).
+* **\<nombre\_usuario>**: Tu nombre de usuario en DockerHub.
+* **\<nombre\_repositorio>**: Nombre del repositorio que creaste en DockerHub.
+
+#### 4️⃣ Subir la imagen al repositorio remoto
+
+```bash
+docker push <nombre_usuario>/<nombre_repositorio>:<etiqueta>
+```
