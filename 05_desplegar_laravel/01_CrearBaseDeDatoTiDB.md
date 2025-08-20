@@ -28,11 +28,11 @@ cd /mnt/<su directorio raíz del proyecto de ejemplo>
 Importe la copia de seguridad de la base de datos con el siguiente comando.
 ```
 mysql --comments --connect-timeout 150 -u '<your_username>' -h <your_cluster_host> -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=<your_ca_path> -p<your_password> < product_data.sql
-
-mysql --comments --connect-timeout 150 -u '2puvRTdtCXSZp6Z.root' -h gateway01.us-east-1.prod.aws.tidbcloud.com -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=/mnt/c/isrgrootx1.pem -pss8rqUIX4nUONld7 < ordersdb.sql
 ```
 > Ejemplo:
-> 
+> ```
+> mysql --comments --connect-timeout 150 -u '2puvRTdtCXSZp6Z.root' -h gateway01.us-east-1.prod.aws.tidbcloud.com -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=isrgrootx1.pem -pss8rqUIX4nUONld7 < ordersdb.sql
+> ```
 
 ## Actualiza la información de la base de dato en `.env`
 Cambia la información del fichero `.env` por la del TiDB.
