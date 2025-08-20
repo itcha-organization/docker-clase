@@ -91,3 +91,7 @@ Modifique los valores de las variables de entorno para el entorno de producción
 - APP_URL: URL pública de su servicio web
 - LOG_LEVEL: `info`
 - `SESSION_SECURE_COOKIE=true` ←Crear nuevo
+> <img width="704" height="761" alt="image" src="https://github.com/user-attachments/assets/cf108be0-7cbd-4f38-b03b-428aded71f5f" />
+
+Una vez realizadas las modificaciones, haga clic en `Save and deploy`.
+> <img width="596" height="642" alt="image" src="https://github.com/user-attachments/assets/05e2bdb0-b978-4f03-86f0-18722c9cd5af" />
