@@ -47,6 +47,45 @@ ordersdb.sql
 ### Crear `Dockerfile` de Laravel
 En primer lugar, consideremos los pasos para configurar directamente el entorno de ejecución de Laravel en una máquina Linux.
 
+<details>
+<summary>Pasos para configurar un entorno de ejecución de una aplicación Laravel & Vue en Linux (sin DB local)</summary>
+
+#### 1. Instalar los paquetes necesarios
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y \
+    git unzip curl \
+    php-cli php-mbstring php-xml php-bcmath php-curl php-zip \
+    composer \
+    nodejs npm \
+    nginx
+```
+
+#### 2. Desplegar el proyecto Laravel
+
+```bash
+cd /var/www
+sudo git clone https://github.com/your-repo/laravel-vue-app.git
+cd laravel-vue-app
+```
+
+#### 3. Instala dependencias:
+
+```bash
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build
+```
+
+#### 4. Configurar permisos
+
+```bash
+sudo chown -R www-data:www-data /var/www/laravel-vue-app/storage /var/www/laravel-vue-app/bootstrap/cache
+```
+
+</details>
+
 Estos pasos se traducen en el siguiente `Dockerfile`.
 ```Dockerfile
 # 1. Imagen de base
@@ -91,8 +130,32 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # 9. Comandos de inicio de la aplicación Laravel
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 ```
+1. `FROM php:8.3-fpm-alpine`
+    * **Alpine Linux** es una distribución de Linux muy ligera.
+    * Usarla como imagen base en Docker reduce el tamaño de la imagen y acelera el arranque del contenedor.
 
+2. `apk add --no-cache`
+    * **`apk`** es el gestor de paquetes de Alpine Linux.
+    * **`add`** instala paquetes.
+    * **`--no-cache`** evita guardar caché durante la instalación, reduciendo el tamaño de la imagen.
 
+3. `apk add --no-cache --virtual .build-deps $PHPIZE_DEPS`
+    * **`--virtual .build-deps`** crea un “paquete virtual” que agrupa varios paquetes. Esto permite eliminar todos esos paquetes juntos más adelante.
+    * **`$PHPIZE_DEPS`** contiene herramientas necesarias para compilar extensiones PHP (gcc, make, autoconf, etc.).
+    * En otras palabras, se instalan temporalmente herramientas de desarrollo necesarias únicamente para compilar extensiones PHP.
+
+4. `docker-php-ext-install`
+    * Comando proporcionado por las imágenes oficiales de PHP para instalar extensiones PHP.
+
+5. `docker-php-source delete`
+    * Elimina el código fuente de PHP para reducir el tamaño de la imagen.
+
+6. `apk del .build-deps`
+    * Elimina todas las herramientas de compilación instaladas como parte del paquete virtual `.build-deps`.
+    * Esto mantiene la imagen ligera tras compilar las extensiones PHP.
+    
+7. `--from=composer:latest`
+    * Utiliza una construcción multi-stage para copiar Composer`/usr/bin/composer` desde otra imagen (la oficial de Composer).
 
 ## Crear una imagen
 ```
