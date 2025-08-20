@@ -1,5 +1,7 @@
 # Desplegar la imagen de Docker en Koyeb
 
+## Crear un nuevo servicio web en Koyeb
+
 Inicia sesión en Koyeb. https://www.koyeb.com/
 
 Seleccione `Docker` y cree un servicio web.
@@ -26,4 +28,66 @@ Una vez finalizado el proceso, abra la URL.
 ⇒ Si el código fuente no soporta `https`, se producen los siguientes errores de `Mixed Content`
 > <img width="1064" height="532" alt="image" src="https://github.com/user-attachments/assets/14056f6f-0354-4a74-ae42-ac55c36bb9b2" />
 
+## Modificación del código para el entorno de producción
 
+Modifique el archivo `AppServiceProvider.php` de la siguiente manera.
+Esto es para que todas las URL generadas se conviertan a HTTPS solo en el entorno de producción (production).
+```php
+<?php
+...Omitido...
+use Illuminate\Support\Facades\URL;
+
+class AppServiceProvider extends ServiceProvider
+{
+    ...Omitido...
+    public function boot(): void
+    {
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+
+        Vite::prefetch(concurrency: 3);
+    }
+}
+```
+
+Si hay partes en las que la URL absoluta del entorno local está codificada de forma rígida, corríjala a una URL relativa.
+En este caso, corregir `Catalogo.vue` y `Categorias.vue`.
+- Catalogo.vue
+  ```diff
+  - const urlBase = 'http://127.0.0.1:8000/api/'
+  const urlBase = '/api/'
+  ```
+- Categorias.vue
+  ```diff
+  - const url = "http://127.0.0.1:8000/api/categorias";
+  const url = "/api/categorias";
+  ```
+
+Después de modificar el código, construye la imagen con la etiqueta `v1.1`.
+```
+docker image build -t laravel-app:v1.1 .
+```
+
+Etiquetar la imagen local para asociarla con el repositorio remoto.
+```
+docker tag <nombre_imagen_local>:<etiqueta> <nombre_usuario>/<nombre_repositorio>:<etiqueta>
+```
+
+Subir la imagen al repositorio remoto
+```
+docker push <nombre_usuario>/<nombre_repositorio>:<etiqueta>
+```
+
+Una vez finalizado el envío de imágenes, actualice la etiqueta de imagen `Setting`>`Source` en Koyeb.
+> <img width="870" height="357" alt="image" src="https://github.com/user-attachments/assets/ad2ae829-4f36-421a-9a27-72d26157b09d" />
+
+## Modificación las variables de entorno para el entorno de producción
+
+Modifique los valores de las variables de entorno para el entorno de producción como se indica a continuación.
+
+- APP_DEBUG: `false`
+- APP_ENV: `production`
+- APP_URL: URL pública de su servicio web
+- LOG_LEVEL: `info`
+- `SESSION_SECURE_COOKIE=true` ←Crear nuevo
