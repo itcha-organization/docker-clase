@@ -26,6 +26,8 @@ Thumbs.db
 .env
 .env.*    # Excluir archivos de entorno de desarrollo
 .phpunit.result.cache
+/public/build
+/public/hot
 
 # npm / Vue
 npm-debug.log*
@@ -98,77 +100,64 @@ docker image build -t laravel-app:v1.0 .
 ```
 
 ## Ejectar un contenedor localmente con Docker Compose
-Docker Compose es una herramienta que permite gestionar varios contenedores de forma conjunta.
-
-Todos los contenedores que se van a iniciar y la información de las opciones se pueden describir en un único archivo, `docker-compose.yml`, lo que simplifica la ejecución, ya que se ahorra el trabajo de introducir comandos y se evitan errores debidos a errores tipográficos.
-
-**En esta ocasión solo hay un contenedor, pero hay una gran cantidad de variables de entorno.
-Por lo tanto, como el uso de `container run` alarga la sección de opciones, definiremos las opciones en `docker-compose.yml`.**
-
-Cree un archivo `docker-compose.yml` en el directorio raíz del proyecto y pegue lo siguiente.
-<br>**Los valores marcados con un símbolo ★ deben ser configurados por usted mismo.**
-```yaml
-services:
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: laravel-app
-        ports:
-            - "8000:8000"
-        environment:
-            - APP_NAME=Laravel
-            - APP_ENV=local
-            - APP_KEY=★sobrescríbase usted mismo★
-            - APP_DEBUG=true
-            - APP_TIMEZONE=UTC
-            - APP_URL=http://localhost
-            - APP_LOCALE=en
-            - APP_FALLBACK_LOCALE=en
-            - APP_FAKER_LOCALE=en_US
-            - APP_MAINTENANCE_DRIVER=file
-            - PHP_CLI_SERVER_WORKERS=4
-            - BCRYPT_ROUNDS=12
-            - LOG_CHANNEL=stack
-            - LOG_STACK=single
-            - LOG_DEPRECATIONS_CHANNEL=null
-            - LOG_LEVEL=debug
-            - DB_CONNECTION=mysql
-            - DB_HOST=★sobrescríbase usted mismo★
-            - DB_PORT=4000
-            - DB_DATABASE=test
-            - DB_USERNAME=★sobrescríbase usted mismo★
-            - DB_PASSWORD=★sobrescríbase usted mismo★
-            - MYSQL_ATTR_SSL_CA_B64=★sobrescríbase usted mismo★
-            - SESSION_DRIVER=database
-            - SESSION_LIFETIME=120
-            - SESSION_ENCRYPT=false
-            - SESSION_PATH=/
-            - SESSION_DOMAIN=null
-            - BROADCAST_CONNECTION=log
-            - FILESYSTEM_DISK=local
-            - QUEUE_CONNECTION=database
-            - CACHE_STORE=database
-            - CACHE_PREFIX=
-            - MEMCACHED_HOST=127.0.0.1
-            - REDIS_CLIENT=phpredis
-            - REDIS_HOST=127.0.0.1
-            - REDIS_PASSWORD=null
-            - REDIS_PORT=6379
-            - MAIL_MAILER=log
-            - MAIL_SCHEME=null
-            - MAIL_HOST=127.0.0.1
-            - MAIL_PORT=2525
-            - MAIL_USERNAME=null
-            - MAIL_PASSWORD=null
-            - MAIL_FROM_ADDRESS="hello@example.com"
-            - MAIL_FROM_NAME="${APP_NAME}"
-            - AWS_ACCESS_KEY_ID=
-            - AWS_SECRET_ACCESS_KEY=
-            - AWS_DEFAULT_REGION=us-east-1
-            - AWS_BUCKET=
-            - AWS_USE_PATH_STYLE_ENDPOINT=false
-            - VITE_APP_NAME="${APP_NAME}"
+**Los valores marcados con un símbolo ★ deben ser configurados por usted mismo.**
+```bash
+docker container run --rm \
+  --name laravel-app \
+  -p 8000:8000 \
+  -e APP_NAME=Laravel \
+  -e APP_ENV=local \
+  -e APP_KEY=★sobrescríbase usted mismo★ \
+  -e APP_DEBUG=true \
+  -e APP_TIMEZONE=UTC \
+  -e APP_URL=http://localhost \
+  -e APP_LOCALE=en \
+  -e APP_FALLBACK_LOCALE=en \
+  -e APP_FAKER_LOCALE=en_US \
+  -e APP_MAINTENANCE_DRIVER=file \
+  -e PHP_CLI_SERVER_WORKERS=4 \
+  -e BCRYPT_ROUNDS=12 \
+  -e LOG_CHANNEL=stack \
+  -e LOG_STACK=single \
+  -e LOG_DEPRECATIONS_CHANNEL=null \
+  -e LOG_LEVEL=debug \
+  -e DB_CONNECTION=mysql \
+  -e DB_HOST=★sobrescríbase usted mismo★ \
+  -e DB_PORT=4000 \
+  -e DB_DATABASE=test \
+  -e DB_USERNAME=★sobrescríbase usted mismo★ \
+  -e DB_PASSWORD=★sobrescríbase usted mismo★ \
+  -e MYSQL_ATTR_SSL_CA_B64=★sobrescríbase usted mismo★ \
+  -e SESSION_DRIVER=database \
+  -e SESSION_LIFETIME=120 \
+  -e SESSION_ENCRYPT=false \
+  -e SESSION_PATH=/ \
+  -e SESSION_DOMAIN=null \
+  -e BROADCAST_CONNECTION=log \
+  -e FILESYSTEM_DISK=local \
+  -e QUEUE_CONNECTION=database \
+  -e CACHE_STORE=database \
+  -e CACHE_PREFIX= \
+  -e MEMCACHED_HOST=127.0.0.1 \
+  -e REDIS_CLIENT=phpredis \
+  -e REDIS_HOST=127.0.0.1 \
+  -e REDIS_PASSWORD=null \
+  -e REDIS_PORT=6379 \
+  -e MAIL_MAILER=log \
+  -e MAIL_SCHEME=null \
+  -e MAIL_HOST=127.0.0.1 \
+  -e MAIL_PORT=2525 \
+  -e MAIL_USERNAME=null \
+  -e MAIL_PASSWORD=null \
+  -e MAIL_FROM_ADDRESS="hello@example.com" \
+  -e MAIL_FROM_NAME="${APP_NAME}" \
+  -e AWS_ACCESS_KEY_ID= \
+  -e AWS_SECRET_ACCESS_KEY= \
+  -e AWS_DEFAULT_REGION=us-east-1 \
+  -e AWS_BUCKET= \
+  -e AWS_USE_PATH_STYLE_ENDPOINT=false \
+  -e VITE_APP_NAME="${APP_NAME}" \
+laravel-app:v1.0
 ```
 ## Publicar la imagen en Docker Hub
 
