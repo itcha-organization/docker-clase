@@ -46,11 +46,10 @@ composer require league/flysystem-aws-s3-v3 "^3.0"
 ### 4.2 Variables de entorno
 Agrega en `.env`:
 ```env
-AWS_ACCESS_KEY_ID=tu_access_key
-AWS_SECRET_ACCESS_KEY=tu_secret_key
-AWS_DEFAULT_REGION=auto
-AWS_BUCKET=laravel-storage
-AWS_ENDPOINT=https://<accountid>.r2.cloudflarestorage.com
+CLOUDFLARE_R2_ACCESS_KEY_ID=★su_access_key★
+CLOUDFLARE_R2_SECRET_ACCESS_KEY=★su_secret_key★
+CLOUDFLARE_R2_BUCKET=test
+CLOUDFLARE_R2_ENDPOINT=★su_endpoint★
 ```
 ### 4.3 Configuración en `config/filesystems.php`
 En el arreglo `disks`, agrega (o ajusta) la configuración de `s3`:
@@ -84,41 +83,78 @@ return [
 ```
 Con esto, Laravel ya podrá almacenar archivos en R2.
 
-
-
 ## 5. Modificación del código
 
-### 5.1 Subir archivos a R2
-
+### 5.1 Subida de archivos
 ```php
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 public function store(Request $request)
 {
-    $file = $request->file('imagen');
-    $path = Storage::disk('s3')->put('productos', $file);
+    $producto = new Producto();
+    // ... establecer datos del producto
+    $producto->save();
 
-    return response()->json([
-        'url' => Storage::disk('s3')->url($path)
-    ]);
+    if($request->hasFile('imagenes')){
+        // Obtener el disco a utilizar (local / r2)
+        $disk = config('filesystems.default');
+
+        foreach($request->file('imagenes') as $img){
+            $imageName = time() . '_' . $img->getClientOriginalName();
+
+            if ($disk === 'r2') {
+                // Subida a Cloudflare R2
+                Storage::disk('r2')->putFileAs('images/products', $img, $imageName);
+            } else {
+                // Subida local
+                $img->move(public_path('images/products/'), $imageName);
+            }
+
+            $image = new Imagen();
+            $image->producto_id = $producto->id;
+            $image->nombre = $imageName;
+            $image->save();
+        }
+    }
+
+    return response()->json(['mensaje' => 'Producto creado correctamente']);
 }
 ```
 
-### 5.2 Eliminar archivos de R2
+---
+
+### 5.2 Eliminación de archivos
 
 ```php
-use Illuminate\Support\Facades\Storage;
-
 public function destroy($id)
 {
     $producto = Producto::findOrFail($id);
 
-    // Eliminar imagen asociada en R2
-    if ($producto->imagen) {
-        Storage::disk('s3')->delete($producto->imagen);
-    }
+    // Verificar dependencias, etc.
+    $registro = DetalleOrden::where("producto_id",$producto->id)->first();
+    if(!$registro){
+        $disk = config('filesystems.default');
 
-    $producto->delete();
+        // Eliminar imágenes
+        foreach($producto->imagenes as $image){
+            if ($disk === 'r2') {
+                $filePath = 'images/products/' . $image->nombre;
+                if (Storage::disk('r2')->exists($filePath)) {
+                    Storage::disk('r2')->delete($filePath);
+                }
+            } else {
+                $imagePath = public_path('images/products/' . $image->nombre);
+                unlink($imagePath);
+            }
+        }
+
+        // Eliminar registros de imágenes en la base de datos
+        $producto->imagenes()->delete();
+
+        // Eliminar producto
+        $producto->delete();
+    }
 
     return response()->json(['mensaje' => 'Producto eliminado correctamente']);
 }
@@ -126,30 +162,39 @@ public function destroy($id)
 
 ---
 
-## 6. Verificación en producción
+### 5.3 Accesor para obtener la URL de la imagen (modelo)
 
-1. Sube la aplicación a tu servidor.
-2. Ejecuta las migraciones y caches:
+```php
+use Illuminate\Support\Facades\Storage;
 
-```bash
-php artisan config:cache
-php artisan route:cache
+class Imagen extends Model
+{
+    // ...
+
+    public function getUrlAttribute()
+    {
+        $filePath = 'images/products/' . $this->nombre;
+
+        if (config('filesystems.default') === 'r2') {
+            // Para R2, devolver URL temporal
+            return Storage::disk('r2')->temporaryUrl($filePath, now()->addMinutes(60));
+        } else {
+            // Para local, devolver ruta accesible
+            return asset($filePath);
+        }
+    }
+}
 ```
 
-3. Prueba subiendo un archivo desde tu aplicación.
-4. Confirma en el **Dashboard de R2** que el archivo se guardó en el bucket.
-
 ---
 
-## ✅ Resumen
+### 5.4 Frontend (Vue.js)
 
-* Cloudflare R2 es totalmente compatible con la API S3.
-* Configuramos `.env` y `config/filesystems.php` para que Laravel use R2.
-* Ajustamos el código de subida y eliminación de archivos usando `Storage::disk('s3')`.
-* Con esto, tu aplicación ya está lista para producción con almacenamiento en la nube sin costos de salida.
+```vue
+<!-- Catalogo.vue / Productos.vue -->
+<SwiperSlide v-for="img in producto.imagenes" :key="img">
+    <img :src="img.url" class="w-full h-40 object-contain" />
+</SwiperSlide>
+```
 
----
-
-👉 ご希望に応じて、この教材を「講義用スライド形式」や「ハンズオン実習手順書」風に書き換えることも可能です。
-
-先生の研修教材としては、どちらの形にまとめましょうか？
+**Punto clave:** en el frontend siempre se usa `img.url`, lo que permite mostrar imágenes **tanto desde R2 como desde almacenamiento local con el mismo código**.
