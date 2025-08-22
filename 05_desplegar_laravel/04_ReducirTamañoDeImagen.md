@@ -65,6 +65,7 @@ rm -rf /root/.composer/cache
 * **Código de pruebas (`tests/`)**: innecesario en producción.
 * **Caché de Laravel**: se eliminan archivos temporales de construcción.
 * **Caché de Composer**: archivos temporales usados para descargar paquetes.
+
 👉 Solo queda el código realmente necesario para ejecutar la aplicación.
 
 ### (2) Limpieza relacionada con Node.js
@@ -76,6 +77,7 @@ rm -rf /var/www/package-lock.json
 * **`node_modules/`**: innecesario tras la compilación del frontend.
 * **Caché de npm**: archivos temporales de instalación.
 * **`package-lock.json`**: no es necesario dentro de la imagen de producción (debe mantenerse en el repositorio).
+
 👉 Se conserva únicamente el resultado de la compilación (`public/build` u otros).
 
 ### (3) Limpieza de apk
@@ -83,6 +85,7 @@ rm -rf /var/www/package-lock.json
 rm -rf /var/cache/apk/*
 ```
 * Se eliminan los archivos de caché de Alpine Linux.
+
 👉 Importante realizar la limpieza al final de la construcción.
 
 ## 4. Verificación del efecto
