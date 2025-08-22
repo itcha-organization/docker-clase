@@ -23,6 +23,9 @@ Haga clic en `Deploy`.
 > <img width="724" height="512" alt="image" src="https://github.com/user-attachments/assets/374ebccf-b827-45a9-bf16-a0515a9513d6" />
 
 Una vez finalizado el proceso, abra la URL.
+> [!CAUTION]
+> El acceso puede ser denegado en la red de la institución. En tales casos, utilice una conexión a Internet alternativa.
+
 > <img width="745" height="508" alt="image" src="https://github.com/user-attachments/assets/adf9b9d9-08b9-4ac3-b0af-1f0972817787" />
 
 ⇒ Si el código fuente no soporta `https`, se producen los siguientes errores de `Mixed Content`
@@ -35,16 +38,18 @@ Esto es para que todas las URL generadas se conviertan a HTTPS solo en el entorn
 ```php
 <?php
 ...Omitido...
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\URL;　// ★Añade esta línea
 
 class AppServiceProvider extends ServiceProvider
 {
     ...Omitido...
     public function boot(): void
     {
+        // ★Añade lo siguiente.
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
+        // ★Añade hasta aquí
 
         Vite::prefetch(concurrency: 3);
     }
@@ -63,6 +68,11 @@ En este caso, corregir `Catalogo.vue` y `Categorias.vue`.
   - const url = "http://127.0.0.1:8000/api/categorias";
   const url = "/api/categorias";
   ```
+## Crear una nueva versión de la imagen
+Ejecute el siguiente comando e introduzca la contraseña en el prompt que aparece. (Omita este paso si ya ha iniciado sesión.)
+```
+docker login -u <nombre_de_usuario>
+```
 
 Después de modificar el código, construye la imagen con la etiqueta `v1.1`.
 ```
@@ -73,11 +83,13 @@ Etiquetar la imagen local para asociarla con el repositorio remoto.
 ```
 docker tag <nombre_imagen_local>:<etiqueta> <nombre_usuario>/<nombre_repositorio>:<etiqueta>
 ```
+> <img width="1039" height="71" alt="image" src="https://github.com/user-attachments/assets/6f994bfe-2088-434c-ba85-c204d8b74bd4" />
 
 Subir la imagen al repositorio remoto
 ```
 docker push <nombre_usuario>/<nombre_repositorio>:<etiqueta>
 ```
+> <img width="897" height="74" alt="image" src="https://github.com/user-attachments/assets/7dd4435b-af80-41e6-b85f-644077a93cb6" />
 
 Una vez finalizado el envío de imágenes, actualice la etiqueta de imagen `Setting`>`Source` en Koyeb.
 > <img width="870" height="357" alt="image" src="https://github.com/user-attachments/assets/ad2ae829-4f36-421a-9a27-72d26157b09d" />
