@@ -54,7 +54,7 @@ MYSQL_ATTR_SSL_CA_B64=<Contenido de ca.pem.b64.>
 ```
 > <img width="1132" height="70" alt="image" src="https://github.com/user-attachments/assets/b0227a87-9bf7-4721-a13c-f8bfc4a0d93a" />
 
-Añada el siguiente código a `database.php`.
+En `database.php`, sustituye el contenido de `connections`>`mysql`>`options` por el siguiente código.
 ```php
 <?php
 ...Omitido...
