@@ -313,16 +313,16 @@ Si supera el límite gratuito de 10 GB, se le cobrará.
 1. Inicia sesión en [Cloudflare Dashboard](https://dash.cloudflare.com).
 
 2. Haga clic en **Administrar cuenta**.
-> <img width="1035" height="432" alt="image" src="https://github.com/user-attachments/assets/63970fab-a3da-458f-ad9a-306bd475d71e" />
+   > <img width="1035" height="432" alt="image" src="https://github.com/user-attachments/assets/63970fab-a3da-458f-ad9a-306bd475d71e" />
 
 3. Abra el panel de **facturación** y haga clic en **notificacion de utilizacion facturable**.
-> <img width="1050" height="499" alt="image" src="https://github.com/user-attachments/assets/fc766375-d328-455e-9d5d-d9d16b2307ed" />
+   > <img width="1050" height="499" alt="image" src="https://github.com/user-attachments/assets/fc766375-d328-455e-9d5d-d9d16b2307ed" />
 
 4. Haga clic en el botón **Agregar**.
-> <img width="1057" height="204" alt="image" src="https://github.com/user-attachments/assets/35942a25-fb3f-40c0-b57e-4f50f06dfbf1" />
+   > <img width="1057" height="204" alt="image" src="https://github.com/user-attachments/assets/35942a25-fb3f-40c0-b57e-4f50f06dfbf1" />
 
 5. Seleccione las opciones de **facturación**.
-> <img width="1046" height="337" alt="image" src="https://github.com/user-attachments/assets/a2915899-c500-4a68-a100-1af9ca8d5645" />
+   > <img width="1046" height="337" alt="image" src="https://github.com/user-attachments/assets/a2915899-c500-4a68-a100-1af9ca8d5645" />
 
 6. Configure los elementos como se indica a continuación y haga clic en **Guardar**.
    - Nombre de la notificación: `Notificación cuando se alcanza el 80 % del límite gratuito de 10 GB`
