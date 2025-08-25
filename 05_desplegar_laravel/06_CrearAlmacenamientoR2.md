@@ -86,7 +86,7 @@ Con esto, Laravel ya podrá almacenar archivos en R2.
 ## 5. Modificación del código
 
 ### 5.1 Subida de archivos (Controlador)
-**ProductoController**
+**ProductoController.php**
 ```diff
 use App\Models\Imagen;
 use App\Models\Producto;
@@ -130,7 +130,7 @@ class ProductoController extends Controller
 ```
 
 ### 5.2 Eliminación de archivos (Controlador)
-**ProductoController**
+**ProductoController.php**
 ```diff
 class ProductoController extends Controller
 {
@@ -170,7 +170,7 @@ class ProductoController extends Controller
 ```
 
 ### 5.3 Accesor para obtener la URL de la imagen (Controlador / Modelo)
-**ProductoController**
+**ProductoController.php**
 ```diff
 class ProductoController extends Controller
 {
@@ -197,7 +197,7 @@ class ProductoController extends Controller
 ...Omitido...
 ```
 
-**Imagen**
+**Imagen.php**
 ```php
 <?php
 
@@ -236,12 +236,69 @@ class Imagen extends Model
 
 
 ### 5.4 Frontend (Vue.js)
-
-```vue
-<!-- Catalogo.vue / Productos.vue -->
-<SwiperSlide v-for="img in producto.imagenes" :key="img">
-    <img :src="img.url" class="w-full h-40 object-contain" />
-</SwiperSlide>
+**Productos.vue**
+```diff
+...Omitido...
+<!-- Modal para mostrar las imágenes de cada producto -->
+<Dialog v-model:visible="showImageDialog" 
+header="Imágenes del Producto" :style="{width:'550px'}" class="p-fluid">
+   <Swiper :modules="[Navigation]" navigation class="h-40">
+       <SwiperSlide v-for="img in producto.imagenes" :key="img">
+-          <img :src="`images/products/${img.nombre}`" class="w-full h-40 object-contain" />
+           <img :src="img.url" class="w-full h-40 object-contain" /> <!-- ★Añade esta línea -->
+       </SwiperSlide>
+   </Swiper>
+</Dialog>
+...Omitido...
 ```
 
-**Punto clave:** en el frontend siempre se usa `img.url`, lo que permite mostrar imágenes **tanto desde R2 como desde almacenamiento local con el mismo código**.
+**Catalogo.vue**
+```diff
+...Omitido...
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div v-for="producto in filteredProducts" :key="producto.id" class="bg-white rounded-lg shadow-lg overflow-hidden p-4">
+    <Swiper :modules="[Navigation]" navigation class="h-40">
+      <SwiperSlide v-for="img in producto.imagenes" :key="img">
+-       <img :src="`images/products/${img.nombre}`" class="w-full h-40 object-contain" />
+        <img :src="img.url" class="w-full h-40 object-contain" /> <!-- ★Añade esta línea -->
+      </SwiperSlide>
+    </Swiper>
+...Omitido...
+```
+
+## Crear una nueva versión de la imagen
+Ejecute el siguiente comando e introduzca la contraseña en el prompt que aparece. (Omita este paso si ya ha iniciado sesión.)
+```
+docker login -u <nombre_de_usuario>
+```
+
+Después de modificar el código, construye la imagen con la etiqueta `v1.3`.
+```
+docker image build -t laravel-app:v1.3 .
+```
+
+Etiquetar la imagen local para asociarla con el repositorio remoto.
+```
+docker tag <nombre_imagen_local>:<etiqueta> <nombre_usuario>/<nombre_repositorio>:<etiqueta>
+```
+
+Subir la imagen al repositorio remoto
+```
+docker push <nombre_usuario>/<nombre_repositorio>:<etiqueta>
+```
+
+Una vez finalizado el envío de imágenes, actualice la etiqueta de imagen `Setting`>`Source` en Koyeb.
+> <img width="870" height="357" alt="image" src="https://github.com/user-attachments/assets/ad2ae829-4f36-421a-9a27-72d26157b09d" />
+
+## Modificación las variables de entorno para el entorno de producción
+Modifique los valores de las variables de entorno para el entorno de producción como se indica a continuación.
+
+- FILESYSTEM_DISK: `r2`
+- CLOUDFLARE_R2_BUCKET=test
+- CLOUDFLARE_R2_ACCESS_KEY_ID=★su_access_key★
+- CLOUDFLARE_R2_SECRET_ACCESS_KEY=★su_secret_key★
+- CLOUDFLARE_R2_ENDPOINT=★su_endpoint★
+> <img width="704" height="693" alt="image" src="https://github.com/user-attachments/assets/eba4c001-2f16-4d20-9886-054b0d2f429e" />
+
+Una vez realizadas las modificaciones, haga clic en `Save and deploy`.
+> <img width="596" height="642" alt="image" src="https://github.com/user-attachments/assets/05e2bdb0-b978-4f03-86f0-18722c9cd5af" />
