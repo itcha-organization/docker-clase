@@ -30,11 +30,11 @@ R2 ofrece 10 GB de almacenamiento gratuito y cuenta con paquetes para Laravel, l
    > <img width="1048" height="770" alt="image" src="https://github.com/user-attachments/assets/1856ab06-8d3c-4828-b47c-c96b6b45d7d7" />
 
 5. Anote las credenciales:
+<br>⚠️ Importante: guárdalas en un lugar seguro, solo se muestran una vez.
    * `Access Key ID`
    * `Secret Access Key`
    * `Endpoint URL` (ejemplo: `https://<accountid>.r2.cloudflarestorage.com`)
-    > <img width="1193" height="788" alt="image" src="https://github.com/user-attachments/assets/38b8de4e-bfa0-443f-9fc3-5fa4a2e33947" />
-⚠️ Importante: guárdalas en un lugar seguro, solo se muestran una vez.
+     > <img width="1193" height="788" alt="image" src="https://github.com/user-attachments/assets/38b8de4e-bfa0-443f-9fc3-5fa4a2e33947" />
 
 ## 4. Configuración en Laravel
 
@@ -85,108 +85,155 @@ Con esto, Laravel ya podrá almacenar archivos en R2.
 
 ## 5. Modificación del código
 
-### 5.1 Subida de archivos
-```php
+### 5.1 Subida de archivos (Controlador)
+**ProductoController**
+```diff
+use App\Models\Imagen;
+use App\Models\Producto;
+use Illuminate\Http\Request;
+// ★↓↓↓Añade lo siguiente↓↓↓
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+// ★↑↑↑Añade hasta aquí↑↑↑
 
-public function store(Request $request)
+class ProductoController extends Controller
 {
-    $producto = new Producto();
-    // ... establecer datos del producto
-    $producto->save();
-
-    if($request->hasFile('imagenes')){
-        // Obtener el disco a utilizar (local / r2)
-        $disk = config('filesystems.default');
-
-        foreach($request->file('imagenes') as $img){
-            $imageName = time() . '_' . $img->getClientOriginalName();
-
-            if ($disk === 'r2') {
-                // Subida a Cloudflare R2
-                Storage::disk('r2')->putFileAs('images/products', $img, $imageName);
-            } else {
-                // Subida local
-                $img->move(public_path('images/products/'), $imageName);
-            }
-
-            $image = new Imagen();
-            $image->producto_id = $producto->id;
-            $image->nombre = $imageName;
-            $image->save();
-        }
-    }
-
-    return response()->json(['mensaje' => 'Producto creado correctamente']);
-}
+...Omitido...
+    public function store(Request $request)
+    {
+        try{
+     ...Omitido...
+            $producto->save(); //guardamos en productos
+            //verificamos si la peticion trae imágenes
+            if($request->hasFile('imagenes')){
+// ★↓↓↓Añade lo siguiente↓↓↓
+                // Obtener FILESYSTEM_DISK (local / r2)
+                $disk = config('filesystems.default');
+// ★↑↑↑Añade hasta aquí↑↑↑
+                //recorremos la colección de imagenes para guardarlas en "imagenes"
+                foreach($request->file('imagenes') as $img){
+                    //creamos un nombre único de la imagen
+                    $imageName = time() . '_' . $img->getClientOriginalName();
+-                    //subimos el archivo de imagen a una carpeta publica del servidor
+-                    $img->move(public_path('images/products/'),$imageName);
+// ★↓↓↓Añade lo siguiente↓↓↓
+                    // Subida según el disco
+                    if ($disk === 'r2') {
+                        // Subida a Cloudflare R2
+                        Storage::disk('r2')->putFileAs('images/products', $img, $imageName);
+                    } else {
+                        // Subida local (public/images/products)
+                        $img->move(public_path('images/products/'), $imageName);
+                    }
+// ★↑↑↑Añade hasta aquí↑↑↑
+...Omitido...
 ```
 
----
-
-### 5.2 Eliminación de archivos
-
-```php
-public function destroy($id)
+### 5.2 Eliminación de archivos (Controlador)
+**ProductoController**
+```diff
+class ProductoController extends Controller
 {
-    $producto = Producto::findOrFail($id);
+...Omitido...
+    public function destroy($id)
+    {
+        try{
+    ...Omitido...
+            //verficamos si no hay registros del producto en la tabla de detalle_ordenes
+            $registro = DetalleOrden::where("producto_id",$producto->id)->first();
+            if(!$registro){
+// ★↓↓↓Añade lo siguiente↓↓↓
+                // Obtener FILESYSTEM_DISK (local / r2)
+                $disk = config('filesystems.default');
+// ★↑↑↑Añade hasta aquí↑↑↑
 
-    // Verificar dependencias, etc.
-    $registro = DetalleOrden::where("producto_id",$producto->id)->first();
-    if(!$registro){
-        $disk = config('filesystems.default');
-
-        // Eliminar imágenes
-        foreach($producto->imagenes as $image){
-            if ($disk === 'r2') {
-                $filePath = 'images/products/' . $image->nombre;
-                if (Storage::disk('r2')->exists($filePath)) {
-                    Storage::disk('r2')->delete($filePath);
+                //podemos eliminar el producto, primero eliminamos las imagenes del servidor
+                foreach($producto->imagenes as $image){
+-                    $imagePath = public_path() .'/images/products/' . $image->nombre;
+-                    unlink($imagePath);
+// ★↓↓↓Añade lo siguiente↓↓↓
+                    if ($disk === 'r2') {
+                        // Eliminación de Cloudflare R2
+                        $filePath = 'images/products/' . $image->nombre;
+                        if (Storage::disk('r2')->exists($filePath)) {
+                            Storage::disk('r2')->delete($filePath);
+                        }
+                    } else {
+                        $imagePath = public_path() .'/images/products/' . $image->nombre;
+                        unlink($imagePath);
+                    }
+// ★↑↑↑Añade hasta aquí↑↑↑
                 }
-            } else {
-                $imagePath = public_path('images/products/' . $image->nombre);
-                unlink($imagePath);
-            }
-        }
-
-        // Eliminar registros de imágenes en la base de datos
-        $producto->imagenes()->delete();
-
-        // Eliminar producto
-        $producto->delete();
-    }
-
-    return response()->json(['mensaje' => 'Producto eliminado correctamente']);
-}
+                //eliminamos los registros de la tabla de imagenes
+                $producto->imagenes()->delete();
+...Omitido...
 ```
 
----
+### 5.3 Accesor para obtener la URL de la imagen (Controlador / Modelo)
+**ProductoController**
+```diff
+class ProductoController extends Controller
+{
+...Omitido...
+    public function index()
+    {
+        try{
+-            return response()->json(Producto::with('marca','categoria','imagenes')->get());
+// ★↓↓↓Añade lo siguiente↓↓↓
+            $productos = Producto::with('marca','categoria','imagenes')->get();
 
-### 5.3 Accesor para obtener la URL de la imagen (modelo)
+            // Incluir la url generada por el accessor en el JSON
+            $productos->each(function($producto){
+                $producto->imagenes->each(function($imagen){
+                    $imagen->url = $imagen->url; // getUrlAttribute() es llamado
+                });
+            });
 
+            return response()->json($productos);
+// ★↑↑↑Añade hasta aquí↑↑↑
+        }catch(\Exception $e){
+            return response()->json(['error'=>$e->getMessage()],500);
+        }
+...Omitido...
+```
+
+**Imagen**
 ```php
-use Illuminate\Support\Facades\Storage;
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage; // ★←←←Añade esta línea.
 
 class Imagen extends Model
 {
-    // ...
+    use HasFactory;
+    protected $table = "imagenes";
+    protected $fillable = ['nombre','producto_id'];
+    //relacion con el modelo Imagen
+    public function producto(){
+        return $this->belongsTo(Producto::class);
+    }
 
+// ★↓↓↓Añade lo siguiente↓↓↓
+    // Accesor que devuelve URL
     public function getUrlAttribute()
     {
         $filePath = 'images/products/' . $this->nombre;
 
+        // Si es R2, devuelve la URL pública; si es local, devuelve la ruta de almacenamiento
         if (config('filesystems.default') === 'r2') {
-            // Para R2, devolver URL temporal
             return Storage::disk('r2')->temporaryUrl($filePath, now()->addMinutes(60));
         } else {
-            // Para local, devolver ruta accesible
             return asset($filePath);
         }
     }
+// ★↑↑↑Añade hasta aquí↑↑↑
 }
 ```
 
----
 
 ### 5.4 Frontend (Vue.js)
 
