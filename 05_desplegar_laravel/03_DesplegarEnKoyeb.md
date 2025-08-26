@@ -38,7 +38,7 @@ Esto es para que todas las URL generadas se conviertan a HTTPS solo en el entorn
 ```php
 <?php
 ...Omitido...
-use Illuminate\Support\Facades\URL;　// ★Añade esta línea
+use Illuminate\Support\Facades\URL; // ★Añade esta línea
 
 class AppServiceProvider extends ServiceProvider
 {
