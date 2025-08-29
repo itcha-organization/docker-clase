@@ -8,12 +8,15 @@ Una vez finalizado el periodo de prueba de 7 días, esta organización dejará d
 Para crear una organización de Hobby Plan totalmente gratuita, siga los pasos que se indican a continuación.
 
 <details>
-<summary>Eliminación de organizaciones del Plan Pro y creación de organizaciones del Plan Hobby</summary>
+<summary>Clic: Eliminación de organizaciones del Plan Pro y creación de organizaciones del Plan Hobby</summary>
 
-
+Pulse `Settings` y, a continuación, pulse el botón `Deactivate` situado en la parte inferior.
 > <img width="710" height="539" alt="image" src="https://github.com/user-attachments/assets/a9115783-9d9e-4d96-b117-7f18d1a74a35" />
+Introduzca el nombre de la organización y pulse el botón `Deactivate` situado en la parte inferior.
 > <img width="324" height="161" alt="image" src="https://github.com/user-attachments/assets/2f879341-eb71-4819-82bb-c7bee5fad533" />
+Compruebe el correo electrónico que recibe y haga clic en el botón.
 > <img width="770" height="552" alt="image" src="https://github.com/user-attachments/assets/3c7a824d-4eef-437d-8b5e-84bdad208bc1" />
+Vuelva a la pantalla de Koyeb, haga clic en el nombre de la organización y pulse el botón `Crear organización` que aparece.
 > <img width="706" height="550" alt="image" src="https://github.com/user-attachments/assets/831b64c7-7d64-40bc-beac-e46f46c9591b" />
 > <img width="334" height="156" alt="image" src="https://github.com/user-attachments/assets/33f7e878-28b9-47a1-90a4-4969dc4c5fdd" />
 > <img width="707" height="568" alt="image" src="https://github.com/user-attachments/assets/c97e09d3-4b82-4fb3-ac38-541f4306eb94" />
