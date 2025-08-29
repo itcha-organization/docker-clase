@@ -104,22 +104,16 @@ class ProductoController extends Controller
     {
         try{
      ...Omitido...
-            $producto->save(); //guardamos en productos
-            //verificamos si la peticion trae imágenes
             if($request->hasFile('imagenes')){
-// ★↓↓↓Añade lo siguiente↓↓↓
-                // Obtener FILESYSTEM_DISK (local / r2)
-                $disk = config('filesystems.default');
-// ★↑↑↑Añade hasta aquí↑↑↑
-                //recorremos la colección de imagenes para guardarlas en "imagenes"
+        ...Omitido...
                 foreach($request->file('imagenes') as $img){
                     //creamos un nombre único de la imagen
                     $imageName = time() . '_' . $img->getClientOriginalName();
 -                    //subimos el archivo de imagen a una carpeta publica del servidor
 -                    $img->move(public_path('images/products/'),$imageName);
 // ★↓↓↓Añade lo siguiente↓↓↓
-                    // Subida según el disco
-                    if ($disk === 'r2') {
+                    // Subida según FILESYSTEM_DISK (local / r2)
+                    if (config('filesystems.default') === 'r2') {
                         // Subida a Cloudflare R2
                         Storage::disk('r2')->putFileAs('images/products', $img, $imageName);
                     } else {
@@ -140,20 +134,14 @@ class ProductoController extends Controller
     {
         try{
     ...Omitido...
-            //verficamos si no hay registros del producto en la tabla de detalle_ordenes
-            $registro = DetalleOrden::where("producto_id",$producto->id)->first();
             if(!$registro){
-// ★↓↓↓Añade lo siguiente↓↓↓
-                // Obtener FILESYSTEM_DISK (local / r2)
-                $disk = config('filesystems.default');
-// ★↑↑↑Añade hasta aquí↑↑↑
-
                 //podemos eliminar el producto, primero eliminamos las imagenes del servidor
                 foreach($producto->imagenes as $image){
 -                    $imagePath = public_path() .'/images/products/' . $image->nombre;
 -                    unlink($imagePath);
 // ★↓↓↓Añade lo siguiente↓↓↓
-                    if ($disk === 'r2') {
+                    // Subida según FILESYSTEM_DISK (local / r2)
+                    if (config('filesystems.default') === 'r2') {
                         // Eliminación de Cloudflare R2
                         $filePath = 'images/products/' . $image->nombre;
                         if (Storage::disk('r2')->exists($filePath)) {
@@ -170,34 +158,7 @@ class ProductoController extends Controller
 ...Omitido...
 ```
 
-### 5.3 Accesor para obtener la URL de la imagen (Controlador / Modelo)
-**ProductoController.php**
-```diff
-class ProductoController extends Controller
-{
-...Omitido...
-    public function index()
-    {
-        try{
--            return response()->json(Producto::with('marca','categoria','imagenes')->get());
-// ★↓↓↓Añade lo siguiente↓↓↓
-            $productos = Producto::with('marca','categoria','imagenes')->get();
-
-            // Incluir la url generada por el accessor en el JSON
-            $productos->each(function($producto){
-                $producto->imagenes->each(function($imagen){
-                    $imagen->url = $imagen->url; // getUrlAttribute() es llamado
-                });
-            });
-
-            return response()->json($productos);
-// ★↑↑↑Añade hasta aquí↑↑↑
-        }catch(\Exception $e){
-            return response()->json(['error'=>$e->getMessage()],500);
-        }
-...Omitido...
-```
-
+### 5.3 Accesor para obtener la URL de la imagen (Modelo)
 **Imagen.php**
 ```php
 <?php
@@ -219,6 +180,9 @@ class Imagen extends Model
     }
 
 // ★↓↓↓Añade lo siguiente↓↓↓
+    // Accesor para la URL de la imagen
+    protected $appends = ['url'];
+
     // Accesor que devuelve URL
     public function getUrlAttribute()
     {
