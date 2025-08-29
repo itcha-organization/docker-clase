@@ -18,8 +18,11 @@ Compruebe el correo electrónico que recibe y haga clic en el botón.
 > <img width="770" height="552" alt="image" src="https://github.com/user-attachments/assets/3c7a824d-4eef-437d-8b5e-84bdad208bc1" />
 Vuelva a la pantalla de Koyeb, haga clic en el nombre de la organización y pulse el botón `Crear organización` que aparece.
 > <img width="706" height="550" alt="image" src="https://github.com/user-attachments/assets/831b64c7-7d64-40bc-beac-e46f46c9591b" />
+Siga las instrucciones para crear una organización, como hizo al crear su cuenta.
 > <img width="334" height="156" alt="image" src="https://github.com/user-attachments/assets/33f7e878-28b9-47a1-90a4-4969dc4c5fdd" />
+Haga clic en el nombre de la organización y haga clic en el nombre de la antigua organización.
 > <img width="707" height="568" alt="image" src="https://github.com/user-attachments/assets/c97e09d3-4b82-4fb3-ac38-541f4306eb94" />
+Pulse `Settings` y, a continuación, pulse el botón `Delete` situado en la parte inferior.
 > <img width="873" height="556" alt="image" src="https://github.com/user-attachments/assets/0a6836a2-515e-4c26-9bfb-cc34e8057317" />
 
 </details>
