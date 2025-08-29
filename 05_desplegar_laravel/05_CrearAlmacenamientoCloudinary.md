@@ -255,7 +255,7 @@ Modifique los valores de las variables de entorno para el entorno de producción
 
 - FILESYSTEM_DISK: `cloudinary`
 - CLOUDINARY_URL=★La URL que acaba de copiar★
-> <img width="704" height="693" alt="image" src="https://github.com/user-attachments/assets/eba4c001-2f16-4d20-9886-054b0d2f429e" />
+> <img width="520" height="169" alt="image" src="https://github.com/user-attachments/assets/8656e54d-3fae-4c9f-89d3-65830d7b78d0" />
 
 Una vez realizadas las modificaciones, haga clic en `Save and deploy`.
 > <img width="596" height="642" alt="image" src="https://github.com/user-attachments/assets/05e2bdb0-b978-4f03-86f0-18722c9cd5af" />
