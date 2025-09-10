@@ -88,44 +88,31 @@ En este tutorial aprenderás cómo usar **Docker Volume** para que una base de d
 
 
 ## 1. Crear un volumen
-
 Primero creamos un volumen llamado `db-volume`:
-
 ```bash
 docker volume create --name db-volume
 ```
-
 Verifica que el volumen existe:
-
 ```bash
 docker volume ls
 ```
-
----
+> <img width="604" height="171" alt="image" src="https://github.com/user-attachments/assets/d4c0d623-79bd-4eae-97a3-1473ebd3926f" />
 
 ## 2. Revisar la configuración de MySQL
-
 Antes de iniciar MySQL con volumen, podemos revisar dónde guarda sus datos.
-
 ```bash
 docker container run --rm mysql:8.2.0 cat /etc/my.cnf
 ```
-
 Dentro del archivo aparece:
-
 ```
 datadir=/var/lib/mysql
 ```
-
 👉 Esto significa que los datos de MySQL se almacenan en `/var/lib/mysql`.
 Ese será el directorio que montaremos al volumen.
-
----
+> <img width="759" height="681" alt="image" src="https://github.com/user-attachments/assets/0e775094-6c29-42e5-a658-0e909c3f6526" />
 
 ## 3. Iniciar un contenedor MySQL con volumen
-
 Ahora ejecutamos un contenedor MySQL con el volumen montado:
-
 ```bash
 docker container run --name db1 --rm --detach \
   --env MYSQL_ROOT_PASSWORD=secret \
@@ -134,134 +121,84 @@ docker container run --name db1 --rm --detach \
   --mount type=volume,src=db-volume,dst=/var/lib/mysql \
   mysql:8.2.0
 ```
-
 * `--env MYSQL_ROOT_PASSWORD=secret` → establece la contraseña del usuario root.
 * `--env MYSQL_DATABASE=sample` → crea una base de datos inicial llamada `sample`.
 * `--mount ...` → monta el volumen `db-volume` en `/var/lib/mysql`.
-
----
+> <img width="722" height="194" alt="image" src="https://github.com/user-attachments/assets/b65082e2-260d-4227-90a2-01e5d535e887" />
 
 ## 4. Conectarse a la base de datos
-
 Con el contenedor en ejecución, nos conectamos desde el cliente MySQL instalado en la máquina host:
-
 ```bash
 mysql --host=127.0.0.1 --port=3306 --user=root --password=secret sample
 ```
-
-Salida esperada:
-
-```
-Welcome to the MySQL monitor...
-```
-
----
+> <img width="912" height="293" alt="image" src="https://github.com/user-attachments/assets/24cadd58-4b26-4c19-92de-3204806a1a38" />
 
 ## 5. Crear una tabla y agregar datos
-
 Dentro de MySQL, creamos una tabla y agregamos registros:
-
 ```sql
 create table user (id int, name varchar(32));
+```
+```sql
 insert into user (id, name) values (1, 'John Doe');
+```
+```sql
 insert into user (id, name) values (2, 'Jane Doe');
+```
+```sql
 select * from user;
 ```
-
-Resultado:
-
-```
-+------+----------+
-| id   | name     |
-+------+----------+
-|    1 | John Doe |
-|    2 | Jane Doe |
-+------+----------+
-```
-
 👉 Los datos fueron guardados en el volumen.
 
 Salir de MySQL:
-
 ```sql
 exit
 ```
-
----
+> <img width="923" height="650" alt="image" src="https://github.com/user-attachments/assets/81489c32-81c6-45c1-be45-85b5e44c9a64" />
 
 ## 6. Detener el contenedor
-
 Ahora detenemos el contenedor MySQL:
-
 ```bash
 docker container stop db1
 ```
-
 Verificamos que ya no está en ejecución:
-
 ```bash
 docker container ls -a
 ```
-
----
+> <img width="668" height="143" alt="image" src="https://github.com/user-attachments/assets/9c2afc15-7ff2-457d-a5a7-74c477320986" />
 
 ## 7. Iniciar un nuevo contenedor con el mismo volumen
-
 Ejecutamos otro contenedor (`db2`) usando el mismo volumen:
-
 ```bash
 docker container run --name db2 --rm --detach \
   --publish 3306:3306 \
   --mount type=volume,src=db-volume,dst=/var/lib/mysql \
   mysql:8.2.0
 ```
-
 Nos conectamos de nuevo:
-
 ```bash
 mysql --host=127.0.0.1 --port=3306 --user=root --password=secret sample
 ```
-
 Consultamos la tabla:
-
 ```sql
 select * from user;
 ```
-
-Resultado:
-
-```
-+------+----------+
-| id   | name     |
-+------+----------+
-|    1 | John Doe |
-|    2 | Jane Doe |
-+------+----------+
-```
-
 👉 Los datos persisten aunque el contenedor original (`db1`) haya sido eliminado.
 
----
+Salir de MySQL:
+```sql
+exit
+```
+> <img width="909" height="630" alt="image" src="https://github.com/user-attachments/assets/6c272a65-6810-42e6-8971-43679cfab2b9" />
 
 ## 8. Detener el contenedor y eliminar el volumen
-
 Cuando ya no necesites la base de datos, puedes detener el contenedor y borrar el volumen:
-
 ```bash
 docker container stop db2
+```
+```bash
 docker volume rm db-volume
 ```
-
----
-
-## Resumen
-
-En este tutorial aprendiste:
-
-1. Crear un volumen para MySQL
-2. Montarlo en `/var/lib/mysql` para persistir datos
-3. Crear tablas y registros en MySQL
-4. Acceder a los mismos datos desde otro contenedor
-5. Eliminar el volumen cuando ya no se necesita
+> <img width="554" height="138" alt="image" src="https://github.com/user-attachments/assets/8a375999-d2e5-4b17-8eb1-a36fc70413b0" />
 
 👉 Gracias a los volúmenes, **los datos sobreviven aunque los contenedores se eliminen**. Esto es fundamental para aplicaciones en producción.
+
