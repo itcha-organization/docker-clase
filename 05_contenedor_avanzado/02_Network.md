@@ -1,3 +1,60 @@
+# Conceptos Básicos de Redes en Docker
+
+Los contenedores Docker, por defecto, se ejecutan en un entorno aislado, por lo que **no pueden comunicarse entre sí ni con el exterior**.
+Aquí es donde entran las **redes**, que permiten gestionar la comunicación entre contenedores y con el host.
+
+---
+
+## 1. Tipos de redes en Docker
+
+### ① bridge (puente)
+
+* Red predeterminada creada por Docker
+* Los contenedores conectados a la misma red bridge pueden comunicarse usando su nombre
+* Comunicación básica entre contenedores
+* Para comunicarse con el host, se deben exponer puertos (`-p`)
+
+### ② host (host)
+
+* El contenedor utiliza directamente la red del host
+* El contenedor comparte la misma IP y puertos que el host
+* No hay aislamiento de red
+
+### ③ none (ninguna)
+
+* Red desactivada
+* El contenedor no puede comunicarse con otros contenedores ni con el exterior
+
+### ④ overlay (superposición)
+
+* Permite la comunicación entre contenedores en diferentes hosts Docker
+* Usado en entornos distribuidos como Docker Swarm
+
+## 2. Operaciones básicas de red
+### Crear una red
+```bash
+docker network create my-network
+```
+
+### Listar redes
+```bash
+docker network ls
+```
+
+### Eliminar una red
+```bash
+docker network rm my-network
+```
+
+## 3. Puntos clave de la comunicación entre contenedores
+* Los contenedores conectados a la misma red pueden comunicarse **usando su nombre**
+  ```bash
+  docker run --network my-network my-php:ping ping db
+  ```
+* Si están en redes diferentes, no podrán comunicarse directamente
+* Para conectarse a servicios como MySQL, se debe especificar correctamente el nombre del contenedor y el puerto
+
+---
 # Tutorial Básico de Redes en Docker
 
 ## Objetivo
