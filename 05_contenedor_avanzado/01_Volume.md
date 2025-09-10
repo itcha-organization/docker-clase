@@ -202,3 +202,76 @@ docker volume rm db-volume
 
 👉 Gracias a los volúmenes, **los datos sobreviven aunque los contenedores se eliminen**. Esto es fundamental para aplicaciones en producción.
 
+---
+
+# Ejercicios: Persistencia de datos con PostgreSQL y Docker Volume
+
+En estos ejercicios, practicarás cómo usar **Docker Volume** para mantener los datos de una base de datos PostgreSQL aunque los contenedores se eliminen.
+Sigue cada problema paso a paso y verifica al final que los datos persisten.
+
+---
+
+## Problema 1: Crear un volumen
+
+Crea un volumen de Docker para PostgreSQL.
+
+* El nombre del volumen debe ser **`pg-volume`**.
+* Verifica que el volumen aparece en la lista de volúmenes creados.
+
+---
+
+## Problema 2: Iniciar un contenedor PostgreSQL
+
+Inicia un contenedor de PostgreSQL montando el volumen creado.
+
+* Nombre del contenedor: **`pg1`**
+* Base de datos inicial: **`sample`**
+* Contraseña del usuario administrador (`postgres`): **`secret`**
+* Publica el puerto **5432** del host al contenedor
+* Monta el volumen `pg-volume` en `/var/lib/postgresql/data`
+
+---
+
+## Problema 3: Conectarse a la base de datos
+
+Conéctate a la base de datos `sample` desde el host usando `psql`.
+
+* Usuario: **`postgres`**
+* Contraseña: **`secret`**
+
+---
+
+## Problema 4: Crear tabla e insertar datos
+
+Dentro de la base de datos `sample`, realiza lo siguiente:
+
+1. Crea una tabla llamada `users` con las columnas `id int` y `name varchar(32)`
+2. Inserta los siguientes registros:
+
+   * `id=1, name='Alice'`
+   * `id=2, name='Bob'`
+3. Verifica que los datos se hayan insertado correctamente ejecutando una consulta de selección (`SELECT *`)
+
+---
+
+## Problema 5: Detener el contenedor
+
+Detén el contenedor `pg1`.
+
+* Verifica que el contenedor ya no aparece en la lista de contenedores en ejecución.
+
+---
+
+## Problema 6: Iniciar un nuevo contenedor y verificar los datos
+
+Inicia otro contenedor llamado `pg2` usando el mismo volumen `pg-volume`.
+
+* Verifica que los datos de la tabla `users` creados en el problema 4 todavía están disponibles.
+
+---
+
+## Problema 7: Detener el contenedor y eliminar el volumen
+
+Detén el contenedor `pg2` y elimina el volumen `pg-volume`.
+
+* Verifica que el volumen ya no aparece en la lista de volúmenes.
