@@ -1,6 +1,55 @@
 # Volume para almacenar datos
 
+## ¿Qué es un Docker Volume?
 
+Un **Volume (volumen)** en Docker es un **mecanismo para persistir datos de un contenedor**.
+
+* Normalmente, los datos dentro de un contenedor se eliminan al borrar el contenedor.
+* Usando un volumen, los datos **se mantienen aunque el contenedor sea eliminado**.
+* Varios contenedores pueden **compartir el mismo volumen**.
+
+## Características de un Volume
+
+1. **Persistencia**
+   * Los datos permanecen incluso si el contenedor se elimina
+   * Ideal para bases de datos o almacenamiento de archivos
+
+2. **Compartición entre contenedores**
+   * Varios contenedores pueden montar el mismo volumen
+   * Ejemplo: una aplicación web y un contenedor de base de datos pueden usar los mismos datos
+
+3. **Fácil de manejar**
+   * Docker gestiona el almacenamiento automáticamente
+   * No necesitas preocuparte por la ruta del host
+
+4. **Seguridad**
+   * Solo accesible desde dentro del contenedor
+   * Más seguro que manipular archivos directamente en el host
+
+## Ejemplos de uso de Volumes
+### Crear un volumen
+```bash
+docker volume create my-volume
+```
+
+### Listar volúmenes
+```bash
+docker volume ls
+```
+
+### Eliminar un volumen
+```bash
+docker volume rm my-volume
+```
+
+### Usar en un contenedor
+```bash
+docker run -it --rm --mount type=volume,src=my-volume,dst=/app ubuntu
+```
+* `src=my-volume` → nombre del volumen creado
+* `dst=/app` → ruta dentro del contenedor donde se montará el volumen
+
+---
 # Tutorial 1: introducción a Docker Volume
 
 En este tutorial aprenderás los conceptos básicos sobre **Docker Volume**.
