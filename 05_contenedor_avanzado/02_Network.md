@@ -5,6 +5,7 @@
 * Aprender a crear y administrar redes en Docker
 * Verificar la comunicación entre contenedores
 * Conectar un contenedor PHP a un contenedor MySQL
+> <img width="882" height="703" alt="image" src="https://github.com/user-attachments/assets/eb9a70cf-31e5-4f4e-a7db-be09b5b9ddde" />
 
 ## 1. Crear el directorio de trabajo
 Primero, creamos un directorio para el tutorial.
