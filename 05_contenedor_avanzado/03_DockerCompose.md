@@ -80,11 +80,6 @@ docker compose down    # Detener
 * Es muy útil para crear entornos de desarrollo y en proyectos de equipo
 
 ---
-
-はい、承知しました。以下をスペイン語に翻訳しました。
-
----
-
 # Tutorial básico de Docker Compose
 
 ## Objetivo
