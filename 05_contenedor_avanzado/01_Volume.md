@@ -1,153 +1,86 @@
 # Volume para almacenar datos
 
 
-# Tutorial 1 de introducción a Docker Volume
+# Tutorial 1: introducción a Docker Volume
 
 En este tutorial aprenderás los conceptos básicos sobre **Docker Volume**.
 Los volúmenes permiten que los datos persistan incluso después de eliminar un contenedor, y además se pueden compartir entre varios contenedores.
 
----
-
 ## 1. Crear un volumen
 
 Primero, crea un nuevo volumen con `docker volume create`:
-
 ```bash
 docker volume create --name my-volume
 ```
-
-Salida esperada:
-
-```
-my-volume
-```
-
 Verifica que el volumen haya sido creado:
-
 ```bash
 docker volume ls
 ```
-
-Salida esperada:
-
-```
-DRIVER    VOLUME NAME
-local     my-volume
-```
-
 👉 El volumen **`my-volume`** es el espacio de almacenamiento que usaremos.
-
----
+> <img width="739" height="182" alt="image" src="https://github.com/user-attachments/assets/85218d5c-7cab-4c7b-95c1-7cf91294423a" />
 
 ## 2. Montar el volumen en un contenedor
-
 Ahora inicia un contenedor de Ubuntu y monta el volumen creado:
-
 ```bash
 docker container run --name ubuntu1 --rm -it \
   --mount type=volume,src=my-volume,dst=/my-work \
   ubuntu:22.04
 ```
-
 * `--mount type=volume` : monta un volumen
 * `src=my-volume` : nombre del volumen a usar
 * `dst=/my-work` : directorio dentro del contenedor donde se montará el volumen
 
 Dentro del contenedor, revisa el punto de montaje `/my-work`:
-
 ```bash
 ls /
 ```
-
-Salida esperada:
-
-```
-bin  boot  dev  etc  home  lib  ...  my-work  opt  proc  ...
-```
-
 👉 El directorio `/my-work` corresponde al volumen montado.
-
----
+> <img width="718" height="139" alt="image" src="https://github.com/user-attachments/assets/5ec16289-8817-49b6-8fd0-b1c2e8f731ac" />
 
 ## 3. Escribir datos en el volumen
-
 Guarda un archivo dentro del volumen:
-
 ```bash
 echo 'hello from container.' > /my-work/hello.txt
+```
+```bash
 cat /my-work/hello.txt
 ```
-
-Salida esperada:
-
-```
-hello from container.
-```
-
 👉 El archivo `hello.txt` se guardó en el volumen.
 
 Luego sal del contenedor:
-
 ```bash
 exit
 ```
-
----
+> <img width="698" height="241" alt="image" src="https://github.com/user-attachments/assets/d7f98cfe-bf0a-4d0c-a451-3b58854ce16d" />
 
 ## 4. Acceder al volumen desde otro contenedor
-
 Si montas el mismo volumen en otro contenedor, los datos seguirán estando disponibles:
-
 ```bash
 docker container run --name ubuntu2 --rm -it \
   --mount type=volume,src=my-volume,dst=/my-work \
   ubuntu:22.04
 ```
-
 Dentro del contenedor:
-
 ```bash
 cat /my-work/hello.txt
 ```
-
-Salida esperada:
-
-```
-hello from container.
-```
-
 👉 Aunque sea otro contenedor, los datos persisten en el volumen.
-
 ```bash
 exit
 ```
-
----
+> <img width="692" height="191" alt="image" src="https://github.com/user-attachments/assets/95215a6b-b2c4-46ad-97a7-f638cedce25e" />
 
 ## 5. Eliminar un volumen
-
 Cuando ya no necesites el volumen, elimínalo con:
-
 ```bash
 docker volume rm my-volume
 ```
-
 Verifica:
-
 ```bash
 docker volume ls
 ```
-
-Salida esperada:
-
-```
-DRIVER    VOLUME NAME
-```
-
 👉 El volumen `my-volume` fue eliminado.
-
----
-
+> <img width="556" height="155" alt="image" src="https://github.com/user-attachments/assets/e2c875d0-be13-4e9c-8597-3416c36f9f15" />
 
 # Tutorial 2: Persistencia de datos con MySQL y Docker Volume
 
