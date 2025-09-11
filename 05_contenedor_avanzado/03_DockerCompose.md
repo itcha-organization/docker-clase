@@ -14,15 +14,15 @@
 Docker Compose es una **herramienta para administrar varios contenedores al mismo tiempo**.
 
 Normalmente, al crear una aplicación web con Docker, los pasos serían:
-
+* Crear la red para permitir la comunicación entre contenedores
+* Crear el volúmen para mantener los datos de la base de datos
 * Ejecutar `docker run` para iniciar el servidor web
 * Ejecutar `docker run` para iniciar la base de datos
-* Configurar la red y las variables de entorno para conectarlos
 
-Escribir todos estos comandos cada vez es tedioso.
+Escribir todos estos comandos cada vez es tedioso.<br>
 → Con **docker-compose.yml**, se puede escribir toda la configuración en un solo archivo y gestionarla con un solo comando.
 
-### Elementos básicos de Compose
+### Elementos básicos de Docker Compose
 
 * **`docker-compose.yml`**: archivo donde se describe la configuración de múltiples contenedores
 * **Servicios (services)**: unidades que conforman la aplicación (ej.: servidor web, servidor de base de datos)
@@ -35,12 +35,18 @@ Escribir todos estos comandos cada vez es tedioso.
    * `docker compose down` → los detiene y elimina en conjunto
 
 2. **Configuración como código**
-   * La imagen del contenedor, los puertos, las variables de entorno, las redes y los volúmenes se definen en un archivo YAML.
+   * La imagen del contenedor, los puertos, las variables de entorno, las redes y los volúmenes se definen en un archivo YAML. Los principales componentes son los siguientes:
+      * **`docker-compose.yml`**: archivo donde se describe la configuración de múltiples contenedores
+      * **Servicios (services)**: unidades que conforman la aplicación (ej.: servidor web, servidor de base de datos)
+      * **Redes (networks)**: redes virtuales que conectan los diferentes servicios
+      * **Volúmenes (volumes)**: mecanismo para la persistencia de los datos
 
 3. **Reproducibilidad del entorno de desarrollo**
    * Si todos los miembros del equipo usan el mismo `docker-compose.yml`, cualquiera puede construir el mismo entorno fácilmente.
 
 ## Ejemplo sencillo
+
+
 `docker-compose.yml`
 ```yaml
 services:
