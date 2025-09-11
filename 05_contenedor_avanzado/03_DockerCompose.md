@@ -264,29 +264,7 @@ Ejecutar el siguiente comando para levantar todo de una vez:
 docker compose up --build
 ```
 
-## 7. Insertar datos en la base de datos (desde el host)
-Conectarse al contenedor de MySQL:
-```bash
-mysql --host=127.0.0.1 --port=3306 --user=root --password=secret sample
-```
-
-Crear la tabla e insertar datos:
-```sql
-CREATE TABLE user (id INT, name VARCHAR(32));
-INSERT INTO user (id, name) VALUES (1, 'John Doe');
-INSERT INTO user (id, name) VALUES (2, 'Jane Doe');
-```
-
-## 8. Verificar ejecución del script PHP
-El contenedor PHP ya está configurado con `command` para ejecutar `php /main.php`, así que en la siguiente ejecución de `docker compose up` se ejecutará automáticamente.
-
-Ejemplo de salida:
-```
-- ID: 1, Name: John Doe
-- ID: 2, Name: Jane Doe
-```
-
-## 9. Limpieza
+## 7. Limpieza
 Para detener y eliminar los contenedores y la red creada:
 ```bash
 docker compose down
