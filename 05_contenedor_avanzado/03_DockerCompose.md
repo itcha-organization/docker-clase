@@ -46,7 +46,7 @@ Escribir todos estos comandos cada vez es tedioso.<br>
 
 ## Ejemplo sencillo
 Utilice compose para lanzar un contenedor de base de datos y un contenedor de servidor web en la misma red.
-- Crear directorio de trabajo
+### 1. Crear directorio de trabajo
 ```
 mkdir compose_ejemplo
 ```
@@ -54,7 +54,7 @@ mkdir compose_ejemplo
 cd compose_ejemplo/
 ```
 
-- Crear un archivo de configuración `docker-compose.yml`
+### 2. Crear un archivo de configuración `docker-compose.yml`
 `docker-compose.yml`
 ```yaml
 services:
@@ -84,19 +84,85 @@ volumes:
 * No se ha definido ninguna red; se crea una automáticamente al iniciar.
 Los contenedores dentro del mismo archivo yaml se conectan automáticamente a la red predeterminada.
 
-- El siguiente comando crea contenedores, volúmenes y redes según el archivo de configuración, por lotes.
+### 3. El siguiente comando crea contenedores, volúmenes y redes según el archivo de configuración, por lotes.
 ```bash
 docker compose up  # Iniciar
 ```
-- El siguiente comando elimina contenedores, volúmenes y redes.
+### 4. El siguiente comando elimina contenedores, volúmenes y redes.
 ```bash
 docker compose down --volume  # Detener
 ```
+
+<details>
+<summary>↓Pasos sin Docker Compose</summary>
+
+## Pasos (sin Docker Compose)
+
+### 1. Crear una red
+
+Para que los contenedores se comuniquen entre sí:
+
+```bash
+docker network create mynetwork
+```
+
+---
+
+### 2. Crear un volumen
+
+Para la persistencia de datos de PostgreSQL:
+
+```bash
+docker volume create db_data
+```
+
+---
+
+### 3. Iniciar el contenedor de base de datos
+
+```bash
+docker run -d \
+  --name db \
+  --network mynetwork \
+  -e POSTGRES_USER=user \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_DB=sampledb \
+  -v db_data:/var/lib/postgresql/data \
+  postgres:15
+```
+
+---
+
+### 4. Iniciar el contenedor web (Nginx)
+
+```bash
+docker run -d \
+  --name web \
+  --network mynetwork \
+  -p 8080:80 \
+  nginx:latest
+```
+
+---
+
+## Puntos clave
+
+* **Red**: con Compose se crea y conecta automáticamente; sin Compose, hay que usar `docker network create` y `--network`.
+* **Volumen**: con Compose se define en `volumes:`, sin Compose hay que crearlo manualmente con `docker volume create`.
+* **Dependencias**: con `depends_on` en Compose se controla el orden; sin Compose, hay que **iniciar manualmente primero la DB y luego el web**.
+
+---
+
+👉 Sin Docker Compose, se deben gestionar **redes, volúmenes y orden de inicio manualmente**, lo que resulta más laborioso.
+
+</details>
 
 ## Resumen
 * Docker Compose = herramienta para administrar varios contenedores fácilmente
 * **Escribes la configuración en `docker-compose.yml` → ejecutas `docker compose up` para levantar todo**
 * Es muy útil para crear entornos de desarrollo y en proyectos de equipo
+
+
 
 ---
 # Tutorial básico de Docker Compose
