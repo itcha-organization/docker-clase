@@ -45,8 +45,16 @@ Escribir todos estos comandos cada vez es tedioso.<br>
    * Si todos los miembros del equipo usan el mismo `docker-compose.yml`, cualquiera puede construir el mismo entorno fácilmente.
 
 ## Ejemplo sencillo
+Utilice compose para lanzar un contenedor de base de datos y un contenedor de servidor web en la misma red.
+- Crear directorio de trabajo
+```
+mkdir compose_ejemplo
+```
+```
+cd compose_ejemplo/
+```
 
-
+- Crear un archivo de configuración `docker-compose.yml`
 `docker-compose.yml`
 ```yaml
 services:
@@ -69,16 +77,20 @@ services:
 volumes:
   db_data:
 ```
-### Puntos clave
+**Puntos clave:**
 * Se definen el servicio `db` (Postgres) y el servicio `web` (Nginx)
 * Con `depends_on`, el servidor web se inicia después de que la base de datos esté en marcha
 * Con `volumes`, los datos de la base de datos se mantienen de forma persistente
+* No se ha definido ninguna red; se crea una automáticamente al iniciar.
+Los contenedores dentro del mismo archivo yaml se conectan automáticamente a la red predeterminada.
 
-Comandos:
+- El siguiente comando crea contenedores, volúmenes y redes según el archivo de configuración, por lotes.
 ```bash
-docker compose up -d   # Iniciar
-docker compose ps      # Verificar
-docker compose down    # Detener
+docker compose up  # Iniciar
+```
+- El siguiente comando elimina contenedores, volúmenes y redes.
+```bash
+docker compose down --volume  # Detener
 ```
 
 ## Resumen
